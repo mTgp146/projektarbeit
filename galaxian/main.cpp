@@ -2,9 +2,14 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-const int WIDTH = 224, HEIGHT = 256;
-const int POS_X = 500, POS_Y = 100;
-double m_galaxip_x = 104.0, m_galaxip_y = 192.0;
+/*
+mingw32-make
+cmake -G "MinGW Makefiles" .
+*/
+
+
+const int WIDTH = 448, HEIGHT = 512;
+double m_galaxip_x = 208.0, m_galaxip_y = 284.0;
 
 int main( int argc, char *argv[] )
 {
@@ -28,7 +33,7 @@ int main( int argc, char *argv[] )
 	    return 4;
     }
 
-    SDL_Surface* galaxip_sur = IMG_Load("Galaxip.png");
+    SDL_Surface* galaxip_sur = IMG_Load("images/Galaxip.png");
     if (galaxip_sur == NULL) {
 	    std::cout << "Error loading image: " << IMG_GetError();
 	    return 5;
@@ -43,8 +48,8 @@ int main( int argc, char *argv[] )
     SDL_Rect galaxip_rect = SDL_Rect();
     galaxip_rect.x = m_galaxip_x;
     galaxip_rect.y = m_galaxip_y;
-    galaxip_rect.w = 16;
-    galaxip_rect.h = 16;
+    galaxip_rect.w = 32;
+    galaxip_rect.h = 32;
 
 
     SDL_FreeSurface(galaxip_sur);
