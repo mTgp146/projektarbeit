@@ -1,8 +1,8 @@
 #include "galaxip.h"
 
 Galaxip::Galaxip() {
-  x = 0;
-  y = 0;
+  setX(208);
+  setY(284);
 }
 
 int Galaxip::getX() const {
