@@ -2,29 +2,35 @@
 
 Galaxip::Galaxip() {
   setX(208);
-  setY(284);
+  setY(384);
+  rect.w = 32;
+  rect.h = 32;
 }
 
 int Galaxip::getX() const {
-  return x;
+  return rect.x;
 }
 
 void Galaxip::setX(int x) {
-  this->x = x;
+  rect.x = x;
 }
 
 int Galaxip::getY() const {
-  return y;
+  return rect.y;
 }
 
 void Galaxip::setY(int y) {
-  this->y = y;
+  rect.y = y;
 }
 
-void Galaxip::moveLeft() {
-  x = x - 1;
+SDL_Rect Galaxip::getRect() const {
+  return rect;
 }
 
-void Galaxip::moveRight() {
-  x = x + 1;
+void Galaxip::moveGalaxip(Direction direction) {
+  if (direction == LEFT) {
+    rect.x = rect.x - 2;
+  } else {
+    rect.x = rect.x + 2;
+  }
 }

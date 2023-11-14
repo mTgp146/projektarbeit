@@ -1,6 +1,26 @@
 #include "view.h"
 #include <iostream>
 
+View::View(Model &model) : model(model) {}
+
+void View::render() {
+    SDL_Rect galaxip_rect = model.getGalaxip().getRect();
+    SDL_Rect projectile_galaxip_rect = model.getGalaxipProjectile().getRect();
+
+
+    SDL_RenderClear(renderer);
+	SDL_RenderCopy(renderer, galaxip_tex, NULL, &galaxip_rect);
+    SDL_RenderCopy(renderer, projectile_galaxip_tex, NULL, &projectile_galaxip_rect);
+	SDL_RenderPresent(renderer);
+}
+
+void View::exit() {
+    SDL_DestroyTexture(galaxip_tex);
+	SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow( window );
+    SDL_Quit();
+}
+
 int View::init() {
     SDL_Init( SDL_INIT_EVERYTHING );
 
@@ -23,40 +43,13 @@ int View::init() {
     }
 
     galaxip_sur = IMG_Load("images/Galaxip.png");
-    if (galaxip_sur == NULL) {
-	    std::cout << "Error loading image: " << IMG_GetError();
-	    return 5;
-    }
-
     galaxip_tex = SDL_CreateTextureFromSurface(renderer, galaxip_sur);
-    if (galaxip_tex == NULL) {
-	    std::cout << "Error creating texture";
-	    return 6;
-    }
-
-    galaxip_rect.x = m_galaxip_x;
-    galaxip_rect.y = m_galaxip_y;
-    galaxip_rect.w = 32;
-    galaxip_rect.h = 32;
-
-
     SDL_FreeSurface(galaxip_sur);
+
+    projectile_galaxip_sur = IMG_Load("images/Projectile_Galaxip.png");
+    projectile_galaxip_tex = SDL_CreateTextureFromSurface(renderer, projectile_galaxip_sur);
+    SDL_FreeSurface(projectile_galaxip_sur);
+
     return 0;
 
-}
-
-void View::render() {
-    m_galaxip_x = m_galaxip_x + 1*(1.0/60.0);
-    galaxip_rect.x = m_galaxip_x;
-
-    SDL_RenderClear(renderer);
-	SDL_RenderCopy(renderer, galaxip_tex, NULL, &galaxip_rect);
-	SDL_RenderPresent(renderer);
-}
-
-void View::exit() {
-    SDL_DestroyTexture(galaxip_tex);
-	SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow( window );
-    SDL_Quit();
 }

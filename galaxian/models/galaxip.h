@@ -1,18 +1,19 @@
+#include <SDL2/SDL.h>
 
 class Galaxip {
 public:
   Galaxip();
-
+  enum Direction { LEFT, RIGHT };
   int getX() const;
   void setX(int x);
 
   int getY() const;
   void setY(int y);
 
-  void moveLeft();
-  void moveRight();
+  SDL_Rect getRect() const;
+
+  void moveGalaxip(Direction direction);
 
 private:
-  float x;
-  float y;
+  SDL_Rect rect = SDL_Rect();
 };
