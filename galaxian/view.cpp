@@ -4,14 +4,30 @@
 View::View(Model &model) : model(model) {}
 
 void View::render() {
-    SDL_Rect galaxip_rect = model.getGalaxip().getRect();
-    SDL_Rect projectile_galaxip_rect = model.getGalaxipProjectile().getRect();
-
-
     SDL_RenderClear(renderer);
-	SDL_RenderCopy(renderer, galaxip_tex, NULL, &galaxip_rect);
-    SDL_RenderCopy(renderer, projectile_galaxip_tex, NULL, &projectile_galaxip_rect);
+
+	renderGalaxip();
+    renderGalaxipProjectile();
+    renderGreenAliens();
+
 	SDL_RenderPresent(renderer);
+}
+
+void View::renderGalaxip() {
+    SDL_Rect galaxip_rect = model.getGalaxip().getRect();
+    SDL_RenderCopy(renderer, galaxip_tex, NULL, &galaxip_rect);
+}
+
+void View::renderGalaxipProjectile() {
+    SDL_Rect projectile_galaxip_rect = model.getGalaxipProjectile().getRect();
+    SDL_RenderCopy(renderer, projectile_galaxip_tex, NULL, &projectile_galaxip_rect);
+}
+
+void View::renderGreenAliens() {
+    for (int i = 0; i < 30; i++) {
+        SDL_Rect green_alien_rect = model.getGreenAlien(i).getRect();
+        SDL_RenderCopy(renderer, green_alien_tex, NULL, &green_alien_rect);
+    }
 }
 
 void View::exit() {
@@ -49,6 +65,10 @@ int View::init() {
     projectile_galaxip_sur = IMG_Load("images/Projectile_Galaxip.png");
     projectile_galaxip_tex = SDL_CreateTextureFromSurface(renderer, projectile_galaxip_sur);
     SDL_FreeSurface(projectile_galaxip_sur);
+
+    green_alien_sur = IMG_Load("images/Green_Alien.png");
+    green_alien_tex = SDL_CreateTextureFromSurface(renderer, green_alien_sur);
+    SDL_FreeSurface(green_alien_sur);
 
     return 0;
 

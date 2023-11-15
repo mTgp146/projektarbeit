@@ -6,6 +6,7 @@ class Controller {
     
     public:
         Controller(Model &model);
+        void init();
         void gameActions();
         void handleUserInput();
     

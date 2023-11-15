@@ -3,6 +3,10 @@
 
 Controller::Controller(Model &model) : model(model) {}
 
+void Controller::init() {
+    model.initAliens();
+}
+
 void Controller::gameActions() {
     model.gameActions();
 }

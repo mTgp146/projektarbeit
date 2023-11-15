@@ -14,6 +14,7 @@ int main( int argc, char *argv[] ) {
     Controller controller = Controller{model};
     SDL_Event windowEvent;
     view.init();
+    controller.init();
     while (true) {
         view.render();
         controller.handleUserInput();

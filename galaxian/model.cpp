@@ -1,11 +1,21 @@
 #include "model.h"
 
+void Model::initAliens() {
+    for(int i = 0; i < 30; i++) {
+        greenAliens[i].setPositionInFormation(i);
+    }
+}
+
 Galaxip Model::getGalaxip() {
     return galaxip;
 }
 
 Projectile Model::getGalaxipProjectile() {
     return projectileGalaxip;
+}
+
+GreenAlien Model::getGreenAlien(int index) {
+    return greenAliens[index];
 }
 
 void Model::moveGalaxip(enum Galaxip::Direction direction) {

@@ -8,6 +8,9 @@ class View {
     View(Model &model);
     int init();
     void render();
+    void renderGalaxip();
+    void renderGalaxipProjectile();
+    void renderGreenAliens();
     void exit();
 
   private:
@@ -17,6 +20,8 @@ class View {
     SDL_Surface* galaxip_sur;
     SDL_Texture* projectile_galaxip_tex;
     SDL_Surface* projectile_galaxip_sur;
+    SDL_Texture* green_alien_tex;
+    SDL_Surface* green_alien_sur;
     SDL_Renderer* renderer;
     SDL_Window *window;
     Model &model;
