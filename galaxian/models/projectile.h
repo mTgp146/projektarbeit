@@ -7,12 +7,14 @@ class Projectile  {
         SDL_Rect getRect() const;
         void setX(int x);
         void setY(int y);
-        void moveProjectile(TYPE type);
-        void setType(TYPE type);
+        void moveProjectile();
         TYPE getType() const;
+        bool isAlive() const;
+        void setAlive(bool alive);
 
     private:
         SDL_Rect rect = SDL_Rect();
         TYPE type;
+        bool alive = false;
 
 };

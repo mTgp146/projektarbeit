@@ -8,6 +8,7 @@ class Model {
         void moveGalaxip(enum Galaxip::Direction direction);
         void shotByGalaxip();
         void gameActions();
+        void resetGalaxipProjectile();
     private:
         Galaxip galaxip;
         Projectile projectileGalaxip{Projectile::TYPE::GALAXIP, galaxip.getRect().x+15, galaxip.getRect().y-8};

@@ -29,8 +29,16 @@ SDL_Rect Galaxip::getRect() const {
 
 void Galaxip::moveGalaxip(Direction direction) {
   if (direction == LEFT) {
-    rect.x = rect.x - 2;
+    if (rect.x <= 10) {
+      rect.x = 10;
+    } else {
+      rect.x = rect.x - 2;
+    }
   } else {
-    rect.x = rect.x + 2;
+    if (rect.x >= 406) {
+      rect.x = 406;
+    } else {
+      rect.x = rect.x + 2;
+    }
   }
 }

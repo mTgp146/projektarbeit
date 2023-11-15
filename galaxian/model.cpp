@@ -13,10 +13,25 @@ void Model::moveGalaxip(enum Galaxip::Direction direction) {
 }
 
 void Model::shotByGalaxip() {
+    if(!projectileGalaxip.isAlive()) {
+        projectileGalaxip.setAlive(true);
+    }
+}
+
+void Model::resetGalaxipProjectile() {
+    projectileGalaxip.setAlive(false);
     projectileGalaxip.setX(galaxip.getRect().x+15);
     projectileGalaxip.setY(galaxip.getRect().y-8);
 }
 
 void Model::gameActions() {
-    projectileGalaxip.moveProjectile(Projectile::TYPE::GALAXIP);
+    if(projectileGalaxip.isAlive()) {
+        if(projectileGalaxip.getRect().y <= 0) {
+            resetGalaxipProjectile();
+        } else {
+            projectileGalaxip.moveProjectile();
+        }
+    } else {
+        projectileGalaxip.setX(galaxip.getRect().x+15);
+    }
 }

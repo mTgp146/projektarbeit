@@ -16,11 +16,10 @@ int main( int argc, char *argv[] ) {
     view.init();
     while (true) {
         view.render();
-        controller.gameActions();
         controller.handleUserInput();
-        if ( SDL_PollEvent( &windowEvent ) )
-        {
-            if ( SDL_QUIT == windowEvent.type ) {
+        controller.gameActions();
+        if(SDL_PollEvent(&windowEvent)) {
+            if(SDL_QUIT == windowEvent.type) {
                 view.exit();
                 break; 
                 }
