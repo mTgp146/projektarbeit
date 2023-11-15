@@ -1,15 +1,15 @@
 #include "green_alien.h"
 
 GreenAlien::GreenAlien() {
-  rect.w = 32;
-  rect.h = 32;
+  rect.w = 28;
+  rect.h = 16;
   rect.x = 20;
   rect.y = 32;
 }
 
 void GreenAlien::setPositionInFormation(int position) {
-  rect.x = 20+(position%10)*20;
-  rect.y = 32*((position/10)+1);
+  rect.x = 30+(position%10)*40;
+  rect.y = 100 + 32*((position/10)+1);
 }
 
 SDL_Rect GreenAlien::getRect() const {

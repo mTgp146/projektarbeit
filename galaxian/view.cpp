@@ -11,6 +11,7 @@ void View::render() {
     renderGreenAliens();
 
 	SDL_RenderPresent(renderer);
+    tick_counter++;
 }
 
 void View::renderGalaxip() {
@@ -24,9 +25,23 @@ void View::renderGalaxipProjectile() {
 }
 
 void View::renderGreenAliens() {
+    if(tick_counter == 30) {
+        tick_counter = 0;
+        if(green_alien_counter < 2) {
+            green_alien_counter++;
+        } else {
+            green_alien_counter = 0;
+        }
+    }
     for (int i = 0; i < 30; i++) {
         SDL_Rect green_alien_rect = model.getGreenAlien(i).getRect();
-        SDL_RenderCopy(renderer, green_alien_tex, NULL, &green_alien_rect);
+        if((i+green_alien_counter)%3 == 0) {
+            SDL_RenderCopy(renderer, green_alien1_tex, NULL, &green_alien_rect);
+        } else if((i+green_alien_counter)%3 == 1) {
+            SDL_RenderCopy(renderer, green_alien2_tex, NULL, &green_alien_rect);
+        } else {
+            SDL_RenderCopy(renderer, green_alien3_tex, NULL, &green_alien_rect);
+        }
     }
 }
 
@@ -66,9 +81,17 @@ int View::init() {
     projectile_galaxip_tex = SDL_CreateTextureFromSurface(renderer, projectile_galaxip_sur);
     SDL_FreeSurface(projectile_galaxip_sur);
 
-    green_alien_sur = IMG_Load("images/Green_Alien.png");
-    green_alien_tex = SDL_CreateTextureFromSurface(renderer, green_alien_sur);
-    SDL_FreeSurface(green_alien_sur);
+    green_alien1_sur = IMG_Load("images/Green_Alien1.png");
+    green_alien1_tex = SDL_CreateTextureFromSurface(renderer, green_alien1_sur);
+    SDL_FreeSurface(green_alien1_sur);
+
+    green_alien2_sur = IMG_Load("images/Green_Alien2.png");
+    green_alien2_tex = SDL_CreateTextureFromSurface(renderer, green_alien2_sur);
+    SDL_FreeSurface(green_alien2_sur);
+
+    green_alien3_sur = IMG_Load("images/Green_Alien3.png");
+    green_alien3_tex = SDL_CreateTextureFromSurface(renderer, green_alien3_sur);
+    SDL_FreeSurface(green_alien3_sur);
 
     return 0;
 

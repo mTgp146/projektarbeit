@@ -20,8 +20,14 @@ class View {
     SDL_Surface* galaxip_sur;
     SDL_Texture* projectile_galaxip_tex;
     SDL_Surface* projectile_galaxip_sur;
-    SDL_Texture* green_alien_tex;
-    SDL_Surface* green_alien_sur;
+    SDL_Texture* green_alien1_tex;
+    SDL_Surface* green_alien1_sur;
+    SDL_Texture* green_alien2_tex;
+    SDL_Surface* green_alien2_sur;
+    SDL_Texture* green_alien3_tex;
+    SDL_Surface* green_alien3_sur;
+    int tick_counter = 0;
+    int green_alien_counter = 0;
     SDL_Renderer* renderer;
     SDL_Window *window;
     Model &model;
