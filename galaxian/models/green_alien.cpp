@@ -1,15 +1,15 @@
 #include "green_alien.h"
 
 GreenAlien::GreenAlien() {
-  rect.w = 28;
-  rect.h = 16;
+  rect.w = 26;
+  rect.h = 14;
   rect.x = 20;
   rect.y = 32;
 }
 
 void GreenAlien::setPositionInFormation(int position) {
-  rect.x = 30+(position%10)*40;
-  rect.y = 100 + 32*((position/10)+1);
+  rect.x = 81+(position%10)*36;
+  rect.y = 143 + 23*((position/10));
 }
 
 SDL_Rect GreenAlien::getRect() const {
@@ -24,10 +24,6 @@ void GreenAlien::setY(int y) {
   rect.y = y;
 }
 
-void GreenAlien::moveGreenAlien() {
-  
-}
-
 bool GreenAlien::isAlive() const {
   return alive;
 }
@@ -36,3 +32,30 @@ void GreenAlien::setAlive(bool alive) {
   this->alive = alive;
 }
 
+void GreenAlien::changeDirection() {
+  if(direction == LEFT) {
+    direction = RIGHT;
+  } else {
+    direction = LEFT;
+  }
+}
+
+GreenAlien::Direction GreenAlien::getDirection() const {
+  return direction;
+}
+
+void GreenAlien::moveGreenAlienAlongXAxis() {
+  if(direction == LEFT) {
+    if(rect.x <= 0) {
+      changeDirection();
+      rect.x = rect.x + 2;
+    } else {
+      rect.x = rect.x - 2;
+    } 
+  } else if(rect.x >= 486) {
+    changeDirection();
+    rect.x = rect.x - 2;
+  } else {
+    rect.x = rect.x + 2;
+  }
+}

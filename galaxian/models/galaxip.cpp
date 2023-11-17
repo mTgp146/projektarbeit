@@ -1,8 +1,8 @@
 #include "galaxip.h"
 
 Galaxip::Galaxip() {
-  setX(208);
-  setY(384);
+  setX(240);
+  setY(448);
   rect.w = 32;
   rect.h = 32;
 }
@@ -35,7 +35,7 @@ void Galaxip::moveGalaxip(Direction direction) {
       rect.x = rect.x - 2;
     }
   } else {
-    if (rect.x >= 406) {
+    if (rect.x >= 470) {
       rect.x = 406;
     } else {
       rect.x = rect.x + 2;

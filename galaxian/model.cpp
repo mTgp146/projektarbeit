@@ -35,6 +35,8 @@ void Model::resetGalaxipProjectile() {
 }
 
 void Model::gameActions() {
+
+    //move Galaxip Projectile
     if(projectileGalaxip.isAlive()) {
         if(projectileGalaxip.getRect().y <= 0) {
             resetGalaxipProjectile();
@@ -43,5 +45,31 @@ void Model::gameActions() {
         }
     } else {
         projectileGalaxip.setX(galaxip.getRect().x+15);
+    }
+
+    //move Green Aliens
+    
+    // -> check if left/right
+    // -> check if at edge
+    // -> if at edge, change direction
+    // -> move direction of 1./30.
+    
+    /*if(greenAliens[0].getDirection() == GreenAlien::Direction::LEFT) {
+        if(greenAliens[0].getRect().x <= 0) {
+            for(int i = 0; i < 30; i++) {
+                greenAliens[i].changeDirection();
+                greenAliens[i].setY(greenAliens[i].getRect().y+2);
+            }
+        }
+    } else {
+        if(greenAliens[29].getRect().x >= 486) {
+            for(int i = 0; i < 30; i++) {
+                greenAliens[i].changeDirection();
+                greenAliens[i].setY(greenAliens[i].getRect().y+2);
+            }
+        }
+    }*/
+    for(int i = 0; i < 30; i++) {
+        greenAliens[i].moveGreenAlienAlongXAxis();
     }
 }

@@ -14,7 +14,7 @@ class View {
     void exit();
 
   private:
-    const int WIDTH = 448;
+    const int WIDTH = 512;
     const int HEIGHT = 512;
     SDL_Texture* galaxip_tex;
     SDL_Surface* galaxip_sur;
