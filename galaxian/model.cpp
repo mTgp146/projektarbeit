@@ -35,7 +35,6 @@ void Model::resetGalaxipProjectile() {
 }
 
 void Model::gameActions() {
-
     //move Galaxip Projectile
     if(projectileGalaxip.isAlive()) {
         if(projectileGalaxip.getRect().y <= 0) {
@@ -48,28 +47,38 @@ void Model::gameActions() {
     }
 
     //move Green Aliens
-    
-    // -> check if left/right
-    // -> check if at edge
-    // -> if at edge, change direction
-    // -> move direction of 1./30.
-    
-    /*if(greenAliens[0].getDirection() == GreenAlien::Direction::LEFT) {
-        if(greenAliens[0].getRect().x <= 0) {
+    // only if projectile is not between aliens
+    if(greenAliens[0].getDirection() == GreenAlien::Direction::LEFT) {
+        if(greenAliens[0].getRect().x <= 30) {
             for(int i = 0; i < 30; i++) {
                 greenAliens[i].changeDirection();
-                greenAliens[i].setY(greenAliens[i].getRect().y+2);
             }
         }
     } else {
-        if(greenAliens[29].getRect().x >= 486) {
+        if(greenAliens[29].getRect().x >= 456) {
             for(int i = 0; i < 30; i++) {
                 greenAliens[i].changeDirection();
-                greenAliens[i].setY(greenAliens[i].getRect().y+2);
             }
         }
-    }*/
+    }
     for(int i = 0; i < 30; i++) {
         greenAliens[i].moveGreenAlienAlongXAxis();
+    }
+
+    //check if Galaxip Projectile intersects with Green Aliens
+    for(int i = 0; i < 30; i++) {
+        if(greenAliens[i].isAlive() && intersects(projectileGalaxip.getRect(), greenAliens[i].getRect())) {
+            greenAliens[i].setAlive(false);
+            resetGalaxipProjectile();
+        }
+    }
+}
+
+bool Model::intersects(SDL_Rect rect1, SDL_Rect rect2) {
+    if(rect1.x < rect2.x + rect2.w && rect1.x + rect1.w > rect2.x && 
+        rect1.y < rect2.y + rect2.h && rect1.y + rect1.h > rect2.y) {
+        return true;
+    } else {
+        return false;
     }
 }

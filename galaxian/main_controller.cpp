@@ -4,6 +4,10 @@
 #include <chrono>
 #include <thread>
 
+/*
+mingw32-make
+cmake -G "MinGW Makefiles" .
+*/
 
 int main( int argc, char *argv[] ) {
     using namespace std::this_thread; //sleep_for

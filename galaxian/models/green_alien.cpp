@@ -46,16 +46,8 @@ GreenAlien::Direction GreenAlien::getDirection() const {
 
 void GreenAlien::moveGreenAlienAlongXAxis() {
   if(direction == LEFT) {
-    if(rect.x <= 0) {
-      changeDirection();
-      rect.x = rect.x + 2;
-    } else {
-      rect.x = rect.x - 2;
-    } 
-  } else if(rect.x >= 486) {
-    changeDirection();
-    rect.x = rect.x - 2;
+    rect.x = rect.x - 1;
   } else {
-    rect.x = rect.x + 2;
+    rect.x = rect.x + 1;
   }
 }

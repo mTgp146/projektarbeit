@@ -13,6 +13,7 @@ class Model {
         void shotByGalaxip();
         void gameActions();
         void resetGalaxipProjectile();
+        bool intersects(SDL_Rect rect1, SDL_Rect rect2);
     private:
         Galaxip galaxip;
         std::array<GreenAlien, 30> greenAliens = {};
