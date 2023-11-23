@@ -10,6 +10,10 @@ Galaxip Model::getGalaxip() {
     return galaxip;
 }
 
+void Model::setGalaxipDT() {
+    galaxip.setLastUpdate();
+}
+
 Projectile Model::getGalaxipProjectile() {
     return projectileGalaxip;
 }
@@ -49,13 +53,13 @@ void Model::gameActions() {
     //move Green Aliens
     // only if projectile is not between aliens
     if(greenAliens[0].getDirection() == GreenAlien::Direction::LEFT) {
-        if(greenAliens[0].getRect().x <= 30) {
+        if(greenAliens[0].getRect().x <= 76) {
             for(int i = 0; i < 30; i++) {
                 greenAliens[i].changeDirection();
             }
         }
     } else {
-        if(greenAliens[29].getRect().x >= 456) {
+        if(greenAliens[0].getRect().x >= 140) {
             for(int i = 0; i < 30; i++) {
                 greenAliens[i].changeDirection();
             }

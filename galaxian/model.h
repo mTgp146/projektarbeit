@@ -7,6 +7,7 @@ class Model {
     public:
         void initAliens();
         Galaxip getGalaxip();
+        void setGalaxipDT();
         Projectile getGalaxipProjectile();
         GreenAlien getGreenAlien(int index);
         void moveGalaxip(enum Galaxip::Direction direction);

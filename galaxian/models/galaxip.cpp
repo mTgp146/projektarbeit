@@ -5,6 +5,7 @@ Galaxip::Galaxip() {
   setY(448);
   rect.w = 32;
   rect.h = 32;
+  lastUpdate = SDL_GetTicks();
 }
 
 int Galaxip::getX() const {
@@ -13,6 +14,7 @@ int Galaxip::getX() const {
 
 void Galaxip::setX(int x) {
   rect.x = x;
+  realX = x;
 }
 
 int Galaxip::getY() const {
@@ -27,18 +29,27 @@ SDL_Rect Galaxip::getRect() const {
   return rect;
 }
 
+void Galaxip::setLastUpdate() {
+  lastUpdate = SDL_GetTicks();
+}
+
 void Galaxip::moveGalaxip(Direction direction) {
+  int dT = SDL_GetTicks() - lastUpdate;
+
   if (direction == LEFT) {
     if (rect.x <= 10) {
       rect.x = 10;
+      realX = 10;
     } else {
-      rect.x = rect.x - 2;
+      realX = realX - 0.131*dT;
     }
   } else {
     if (rect.x >= 470) {
-      rect.x = 406;
+      rect.x = 470;
+      realX = 470;
     } else {
-      rect.x = rect.x + 2;
+      realX = realX + 0.131*dT;
     }
   }
+  rect.x = (int)realX;
 }

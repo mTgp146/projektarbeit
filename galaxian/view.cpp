@@ -93,7 +93,7 @@ void View::renderGreenAliens() {
 void View::exit() {
     SDL_DestroyTexture(galaxip_tex);
 	SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow( window );
+    SDL_DestroyWindow(window);
     SDL_Quit();
 }
 

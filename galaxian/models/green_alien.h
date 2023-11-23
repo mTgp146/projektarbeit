@@ -14,7 +14,9 @@ class GreenAlien {
         void changeDirection();
         Direction getDirection() const;
     private:
+        float realX = 0.0f;
+        int lastUpdate;
         SDL_Rect rect = SDL_Rect();
         bool alive = true;
-        Direction direction = RIGHT;
+        Direction direction = LEFT;
 };

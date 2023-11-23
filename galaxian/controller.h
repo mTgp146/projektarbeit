@@ -15,5 +15,6 @@ class Controller {
         Model &model;
         View &view;
         SDL_Event windowEvent;
+        Uint64 lastUpdate = 0;
 
 };

@@ -1,15 +1,18 @@
 #include "green_alien.h"
 
 GreenAlien::GreenAlien() {
-  rect.w = 26;
+  rect.w = 22;
   rect.h = 14;
-  rect.x = 20;
-  rect.y = 32;
+  rect.x = 110;
+  realX = 110;
+  rect.y = 143;
+  lastUpdate = SDL_GetTicks();
 }
 
 void GreenAlien::setPositionInFormation(int position) {
-  rect.x = 81+(position%10)*36;
-  rect.y = 143 + 23*((position/10));
+  rect.x = 110+(position%10)*30;
+  realX = rect.x;
+  rect.y = 143 + 20*((position/10));
 }
 
 SDL_Rect GreenAlien::getRect() const {
@@ -18,6 +21,7 @@ SDL_Rect GreenAlien::getRect() const {
 
 void GreenAlien::setX(int x) {
   rect.x = x;
+  realX = x;
 }
 
 void GreenAlien::setY(int y) {
@@ -45,9 +49,12 @@ GreenAlien::Direction GreenAlien::getDirection() const {
 }
 
 void GreenAlien::moveGreenAlienAlongXAxis() {
+  int dT = SDL_GetTicks() - lastUpdate;
   if(direction == LEFT) {
-    rect.x = rect.x - 1;
+    realX = realX - 0.02327 * dT;
   } else {
-    rect.x = rect.x + 1;
+    realX = realX + 0.02327 * dT;
   }
+  rect.x = (int)realX;
+  lastUpdate = SDL_GetTicks();
 }

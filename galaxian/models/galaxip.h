@@ -12,8 +12,11 @@ public:
 
   SDL_Rect getRect() const;
 
+  void setLastUpdate();
   void moveGalaxip(Direction direction);
 
 private:
+  float realX = 240.0f;
   SDL_Rect rect = SDL_Rect();
+  int lastUpdate;
 };
