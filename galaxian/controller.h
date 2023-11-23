@@ -5,12 +5,15 @@
 class Controller {
     
     public:
-        Controller(Model &model);
+        Controller(Model &model, View &view);
+        void mainLoop();
         void init();
         void gameActions();
         void handleUserInput();
     
     private:
         Model &model;
+        View &view;
+        SDL_Event windowEvent;
 
 };

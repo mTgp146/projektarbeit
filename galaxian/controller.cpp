@@ -1,7 +1,29 @@
 #include "controller.h"
 #include <iostream>
+#include <chrono>
+#include <thread>
 
-Controller::Controller(Model &model) : model(model) {}
+Controller::Controller(Model &model, View &view) : model(model), view(view) {}
+
+void Controller::mainLoop() {
+    
+    using namespace std::this_thread; //sleep_for
+    using namespace std::chrono_literals; //ms
+
+    while (true) {
+        view.render();
+        handleUserInput();
+        gameActions();
+        if(SDL_PollEvent(&windowEvent)) {
+            if(SDL_QUIT == windowEvent.type) {
+                view.exit();
+                break; 
+                }
+        }
+        //tickrate anpassbar
+        sleep_for(10ms);
+    }
+}
 
 void Controller::init() {
     model.initAliens();
