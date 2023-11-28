@@ -12,6 +12,7 @@ class GreenAlien {
         bool isAlive() const;
         void setAlive(bool alive);
         void changeDirection();
+        void setLastUpdate();
         Direction getDirection() const;
     private:
         float realX = 0.0f;

@@ -12,7 +12,7 @@ GreenAlien::GreenAlien() {
 void GreenAlien::setPositionInFormation(int position) {
   rect.x = 110+(position%10)*30;
   realX = rect.x;
-  rect.y = 143 + 20*((position/10));
+  rect.y = 143 + 21*((position/10));
 }
 
 SDL_Rect GreenAlien::getRect() const {
@@ -46,6 +46,10 @@ void GreenAlien::changeDirection() {
 
 GreenAlien::Direction GreenAlien::getDirection() const {
   return direction;
+}
+
+void GreenAlien::setLastUpdate() {
+  lastUpdate = SDL_GetTicks();
 }
 
 void GreenAlien::moveGreenAlienAlongXAxis() {

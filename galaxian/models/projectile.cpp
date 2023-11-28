@@ -13,6 +13,9 @@ Projectile::Projectile(TYPE type, int x, int y) {
     
     rect.x = x;
     rect.y = y;
+    realY = y;
+
+    lastUpdate = SDL_GetTicks();
 }
 
 SDL_Rect Projectile::getRect() const {
@@ -20,16 +23,16 @@ SDL_Rect Projectile::getRect() const {
 }
 
 void Projectile::moveProjectile() {
+    int dT = SDL_GetTicks() - lastUpdate;
     if(alive) {
-        if(type == GALAXIP) {
-            if(rect.y <= 0) {
-
-            }
-            rect.y = rect.y - 6;
-        } else if(type == ALIEN) {
-            rect.y = rect.y + 2;
-        }
+        //if(type == GALAXIP) {
+            realY = realY - dT*0.5057;
+        //} else if(type == ALIEN) {
+            //rect.y = rect.y + 2;
+        //}
     }
+    rect.y = (int)realY;
+    lastUpdate = SDL_GetTicks();
 }
 
 void Projectile::setX(int x) {
@@ -38,6 +41,7 @@ void Projectile::setX(int x) {
 
 void Projectile::setY(int y) {
     rect.y = y;
+    realY = y;
 }
 
 Projectile::TYPE Projectile::getType() const {
@@ -50,4 +54,8 @@ bool Projectile::isAlive() const {
 
 void Projectile::setAlive(bool alive) {
     this->alive = alive;
+}
+
+void Projectile::setLastUpdate() {
+    lastUpdate = SDL_GetTicks();
 }

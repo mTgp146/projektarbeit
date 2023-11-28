@@ -11,10 +11,13 @@ class Projectile  {
         TYPE getType() const;
         bool isAlive() const;
         void setAlive(bool alive);
+        void setLastUpdate();
 
     private:
+        int lastUpdate;
         SDL_Rect rect = SDL_Rect();
         TYPE type;
         bool alive = false;
+        float realY = 0.0f;
 
 };

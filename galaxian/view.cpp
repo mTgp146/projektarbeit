@@ -79,6 +79,7 @@ void View::renderGreenAliens() {
                 }
             }
 
+            // move alien by 1 pixel left/right when changing texture
             if(tex_1) {
                 SDL_RenderCopy(renderer, green_alien1_tex, NULL, &green_alien_rect);
             } else if(tex_2) {

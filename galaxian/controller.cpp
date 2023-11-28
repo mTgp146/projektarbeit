@@ -49,7 +49,7 @@ void Controller::handleUserInput() {
     }
     if (state[SDL_SCANCODE_RIGHT]) {
         model.moveGalaxip(Galaxip::Direction::RIGHT);
-    }
+    } 
     model.setGalaxipDT();
     if (state[SDL_SCANCODE_X]) {
         model.shotByGalaxip();
