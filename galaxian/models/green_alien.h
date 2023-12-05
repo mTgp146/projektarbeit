@@ -14,9 +14,12 @@ class GreenAlien {
         void changeDirection();
         void setLastUpdate();
         Direction getDirection() const;
+        int getTextureNumber();
+        void setTextureNumber(int texNum);
     private:
         float realX = 0.0f;
         int lastUpdate;
+        int textureNumber = 1;
         SDL_Rect rect = SDL_Rect();
         bool alive = true;
         Direction direction = LEFT;

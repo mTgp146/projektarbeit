@@ -2,7 +2,7 @@
 
 GreenAlien::GreenAlien() {
   rect.w = 22;
-  rect.h = 14;
+  rect.h = 11;
   rect.x = 110;
   realX = 110;
   rect.y = 143;
@@ -12,7 +12,7 @@ GreenAlien::GreenAlien() {
 void GreenAlien::setPositionInFormation(int position) {
   rect.x = 110+(position%10)*30;
   realX = rect.x;
-  rect.y = 143 + 21*((position/10));
+  rect.y = 143 + 19*((position/10));
 }
 
 SDL_Rect GreenAlien::getRect() const {
@@ -61,4 +61,12 @@ void GreenAlien::moveGreenAlienAlongXAxis() {
   }
   rect.x = (int)realX;
   lastUpdate = SDL_GetTicks();
+}
+
+int GreenAlien::getTextureNumber() {
+  return textureNumber;
+}
+
+void GreenAlien::setTextureNumber(int texNum) {
+  textureNumber = texNum;
 }

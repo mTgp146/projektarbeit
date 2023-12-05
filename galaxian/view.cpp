@@ -11,7 +11,6 @@ void View::render() {
     renderGreenAliens();
 
 	SDL_RenderPresent(renderer);
-    tick_counter++;
 }
 
 void View::renderGalaxip() {
@@ -32,57 +31,12 @@ void View::renderGalaxipProjectile() {
 }
 
 void View::renderGreenAliens() {
-    if(tick_counter == 30) {
-        tick_counter = 0;
-        if(green_alien_counter < 3) {
-            green_alien_counter++;
-        } else {
-            green_alien_counter = 0;
-        }
-    }
     for (int i = 0; i < 30; i++) {
         if(model.getGreenAlien(i).isAlive()) {
             SDL_Rect green_alien_rect = model.getGreenAlien(i).getRect();
-            int xPosGA = i%10;
-            bool tex_1 = false;
-            bool tex_2 = false;
-            bool tex_3 = false;
-            bool pos_even = xPosGA == 0 || xPosGA == 2 || xPosGA == 4 || xPosGA == 6 || xPosGA == 8;
-            bool pos_odd  = xPosGA == 1 || xPosGA == 3 || xPosGA == 5 || xPosGA == 7 || xPosGA == 9;            
-            bool pos_1_5_9= xPosGA == 1 || xPosGA == 5 || xPosGA == 9;
-            bool pos_2_6  = xPosGA == 2 || xPosGA == 6;
-            bool pos_3_7  = xPosGA == 3 || xPosGA == 7;
-            bool pos_0_4_8= xPosGA == 0 || xPosGA == 4 || xPosGA == 8;
-            /*
-            2123212321
-            3212321232
-            2321232123
-            1232123212
-            */
-            if(green_alien_counter == 0 || green_alien_counter == 2) {
-                tex_2 = pos_even;
-                if(green_alien_counter == 0) {
-                    tex_1 = pos_1_5_9;
-                    tex_3 = pos_3_7;
-                } else {
-                    tex_1 = pos_3_7;
-                    tex_3 = pos_1_5_9;
-                }
-            } else {
-                tex_2 = pos_odd;
-                if(green_alien_counter == 1) {
-                    tex_1 = pos_2_6;
-                    tex_3 = pos_0_4_8;
-                } else {
-                    tex_1 = pos_0_4_8;
-                    tex_3 = pos_2_6;
-                }
-            }
-
-            // move alien by 1 pixel left/right when changing texture
-            if(tex_1) {
+            if(model.getGreenAlien(i).getTextureNumber() == 1) {
                 SDL_RenderCopy(renderer, green_alien1_tex, NULL, &green_alien_rect);
-            } else if(tex_2) {
+            } else if(model.getGreenAlien(i).getTextureNumber() == 2) {
                 SDL_RenderCopy(renderer, green_alien2_tex, NULL, &green_alien_rect);
             } else {
                 SDL_RenderCopy(renderer, green_alien3_tex, NULL, &green_alien_rect);
