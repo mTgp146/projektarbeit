@@ -4,11 +4,14 @@ class BackgroundParticle {
 
 public:
   enum COLOR { RED, GREEN, BLUE };
-  BackgroundParticle(int x, COLOR color);
+  BackgroundParticle();
+  void setValues(int x, int y, COLOR color);
   void update();
   SDL_Rect getRect() const;
+  SDL_Color getColor() const;
 
 private:
   SDL_Rect rect = SDL_Rect();
-  COLOR color;
-}
+  SDL_Color color = SDL_Color();
+  float realY = 0.0f;
+};

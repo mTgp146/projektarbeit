@@ -11,6 +11,10 @@ class View {
     void renderGalaxip();
     void renderGalaxipProjectile();
     void renderGreenAliens();
+    void renderBlueAliens();
+    void renderRedAliens();
+    void renderFlagships();
+    void renderBackground();
     void exit();
 
   private:
@@ -26,6 +30,20 @@ class View {
     SDL_Surface* green_alien2_sur;
     SDL_Texture* green_alien3_tex;
     SDL_Surface* green_alien3_sur;
+    SDL_Texture* blue_alien1_tex;
+    SDL_Surface* blue_alien1_sur;
+    SDL_Texture* blue_alien2_tex;
+    SDL_Surface* blue_alien2_sur;
+    SDL_Texture* blue_alien3_tex;
+    SDL_Surface* blue_alien3_sur;
+    SDL_Texture* red_alien1_tex;
+    SDL_Surface* red_alien1_sur;
+    SDL_Texture* red_alien2_tex;
+    SDL_Surface* red_alien2_sur;
+    SDL_Texture* red_alien3_tex;
+    SDL_Surface* red_alien3_sur;
+    SDL_Texture* flagship_tex;
+    SDL_Surface* flagship_sur;
     SDL_Renderer* renderer;
     SDL_Window *window;
     Model &model;

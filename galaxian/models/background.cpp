@@ -2,15 +2,15 @@
 #include <stdlib.h>
 
 Background::Background() {
-    for (int x = 0; x < 512; x += 2) {
-        int y = rand() % 512; 
+    for (int x = 0; x < 128; x += 1) {
+        int y = rand() % 512;
         int color = rand() % 3;
         if (color == 0) {
-            particles.push_back(BackgroundParticle(x, y, BackgroundParticle::COLOR::RED));
+            particles[x].setValues(x*4, y, BackgroundParticle::COLOR::RED);
         } else if (color == 1) {
-            particles.push_back(BackgroundParticle(x, y, BackgroundParticle::COLOR::GREEN));
+            particles[x].setValues(x*4, y, BackgroundParticle::COLOR::GREEN);
         } else {
-            particles.push_back(BackgroundParticle(x, y, BackgroundParticle::COLOR::BLUE));
+            particles[x].setValues(x*4, y, BackgroundParticle::COLOR::BLUE);
         }
     }
 }
@@ -21,6 +21,6 @@ void Background::update() {
     }
 }
 
-std::list<BackgroundParticle> Background::getParticles() const {
+std::array<BackgroundParticle, 128> Background::getParticles() const {
     return particles;
 }

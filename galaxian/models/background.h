@@ -1,12 +1,12 @@
-#include <list>
 #include "backgroundParticle.h"
+#include <array>
 
 class Background {
 public:
   Background();
   void update();
-  std::list<BackgroundParticle> getParticles() const;
+  std::array<BackgroundParticle, 128> getParticles() const;
 
 private:
-  std::list<BackgroundParticle> particles;
+  std::array<BackgroundParticle, 128> particles = {};
 };

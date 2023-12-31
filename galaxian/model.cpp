@@ -1,8 +1,25 @@
 #include "model.h"
 
 void Model::initAliens() {
+    // init Green Aliens
     for(int i = 0; i < 30; i++) {
         greenAliens[i].setPositionInFormation(i);
+    }
+    // init Blue Aliens
+    for(int i = 0; i < 8; i++) {
+        blueAliens[i].setPositionInFormation(i);
+    }
+    // init Red Aliens
+    for(int i = 0; i < 6; i++) {
+        redAliens[i].setPositionInFormation(i);
+    }
+    // init Flagships
+    for(int i = 0; i < 10; i++) {
+        if(i == 3 || i == 6) {
+            flagships[i].setPositionInFormation(i);
+        } else {
+            flagships[i].setAlive(false);
+        }
     }
 }
 
@@ -20,6 +37,18 @@ Projectile Model::getGalaxipProjectile() {
 
 GreenAlien Model::getGreenAlien(int index) {
     return greenAliens[index];
+}
+
+BlueAlien Model::getBlueAlien(int index) {
+    return blueAliens[index];
+}
+
+RedAlien Model::getRedAlien(int index) {
+    return redAliens[index];
+}
+
+Flagship Model::getFlagship(int index) {
+    return flagships[index];
 }
 
 void Model::moveGalaxip(enum Galaxip::Direction direction) {
@@ -44,6 +73,7 @@ void Model::gameActions() {
     moveAliens();
     collisionCheck();
     alienDisplayChanger();
+    updateBackground();
 }
 
 void Model::moveGalaxipProjectile() {
@@ -84,20 +114,56 @@ void Model::moveAliens() {
                 for(int i = 0; i < 30; i++) {
                     greenAliens[i].changeDirection();
                 }
+                for(int i = 0; i < 8; i++) {
+                    blueAliens[i].changeDirection();
+                }
+                for(int i = 0; i < 6; i++) {
+                    redAliens[i].changeDirection();
+                }
+                for(int i = 0; i < 10; i++) {
+                    flagships[i].changeDirection();
+                }
             }
         } else {
             if(greenAliens[0].getRect().x >= 140) {
                 for(int i = 0; i < 30; i++) {
                     greenAliens[i].changeDirection();
                 }
+                for(int i = 0; i < 8; i++) {
+                    blueAliens[i].changeDirection();
+                }
+                for(int i = 0; i < 6; i++) {
+                    redAliens[i].changeDirection();
+                }
+                for(int i = 0; i < 10; i++) {
+                    flagships[i].changeDirection();
+                }
             }
         }
         for(int i = 0; i < 30; i++) {
-            greenAliens[i].moveGreenAlienAlongXAxis();
+            greenAliens[i].moveAlienAlongXAxis();
+        }
+        for(int i = 0; i < 8; i++) {
+            blueAliens[i].moveAlienAlongXAxis();
+        }
+        for(int i = 0; i < 6; i++) {
+            redAliens[i].moveAlienAlongXAxis();
+        }
+        for(int i = 0; i < 10; i++) {
+            flagships[i].moveAlienAlongXAxis();
         }
     } else {
         for(int i = 0; i < 30; i++) {
             greenAliens[i].setLastUpdate();
+        }
+        for(int i = 0; i < 8; i++) {
+            blueAliens[i].setLastUpdate();
+        }
+        for(int i = 0; i < 6; i++) {
+            redAliens[i].setLastUpdate();
+        }
+        for(int i = 0; i < 10; i++) {
+            flagships[i].setLastUpdate();
         }
     }
 }
@@ -107,6 +173,27 @@ void Model::collisionCheck() {
     for(int i = 0; i < 30; i++) {
         if(greenAliens[i].isAlive() && intersects(projectileGalaxip.getRect(), greenAliens[i].getRect())) {
             greenAliens[i].setAlive(false);
+            resetGalaxipProjectile();
+        }
+    }
+    // check if Galaxip Projectile intersects with Blue Aliens
+    for(int i = 0; i < 8; i++) {
+        if(blueAliens[i].isAlive() && intersects(projectileGalaxip.getRect(), blueAliens[i].getRect())) {
+            blueAliens[i].setAlive(false);
+            resetGalaxipProjectile();
+        }
+    }
+    // check if Galaxip Projectile intersects with Red Aliens
+    for(int i = 0; i < 6; i++) {
+        if(redAliens[i].isAlive() && intersects(projectileGalaxip.getRect(), redAliens[i].getRect())) {
+            redAliens[i].setAlive(false);
+            resetGalaxipProjectile();
+        }
+    }
+    // check if Galaxip Projectile intersects with Flagships
+    for(int i = 0; i < 10; i++) {
+        if(flagships[i].isAlive() && intersects(projectileGalaxip.getRect(), flagships[i].getRect())) {
+            flagships[i].setAlive(false);
             resetGalaxipProjectile();
         }
     }
@@ -158,7 +245,13 @@ void Model::alienDisplayChanger() {
             } else {
                 greenAliens[i].setTextureNumber(3);
             }
-        }    
+        }
+        for(int i = 0; i < 8; i++) {
+            blueAliens[i].setTextureNumber(greenAliens[i+1].getTextureNumber());
+        }
+        for(int i = 0; i < 6; i++) {
+            redAliens[i].setTextureNumber(greenAliens[i+2].getTextureNumber());
+        }
     }
 }
 
@@ -182,4 +275,12 @@ bool Model::changeAlienDisplay() {
     return true;
   }
   return false;
+}
+
+void Model::updateBackground() {
+    background.update();
+}
+
+std::array<BackgroundParticle, 128> Model::getBackgroundParticles() {
+    return background.getParticles();
 }

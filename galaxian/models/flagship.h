@@ -1,6 +1,6 @@
 #include "alien.h"
 
-class GreenAlien : public Alien {
+class Flagship : public Alien {
     public:
         void setPositionInFormation(int position);
 };
