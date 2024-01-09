@@ -110,6 +110,10 @@ void View::exit() {
     SDL_DestroyTexture(blue_alien1_tex);
     SDL_DestroyTexture(blue_alien2_tex);
     SDL_DestroyTexture(blue_alien3_tex);
+    SDL_DestroyTexture(red_alien1_tex);
+    SDL_DestroyTexture(red_alien2_tex);
+    SDL_DestroyTexture(red_alien3_tex);
+    SDL_DestroyTexture(flagship_tex);
 
 	SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Studium/projektarbeit/galaxian",
-      "program": "c:/Studium/projektarbeit/galaxian/build/Debug/outDebug",
+      "cwd": "c:/Studium/Projektarbeit/galaxian",
+      "program": "c:/Studium/Projektarbeit/galaxian/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
