@@ -39,4 +39,7 @@ class Model {
         std::array<Flagship, 10> flagships = {};
         Projectile projectileGalaxip{Projectile::TYPE::GALAXIP, galaxip.getRect().x+15, galaxip.getRect().y-8};
         Background background;
+        ///
+        //bool attack = false;
+        ///
 };

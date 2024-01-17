@@ -91,7 +91,7 @@ void Model::moveGalaxipProjectile() {
 }
 
 void Model::moveAliens() {
-    // move Green Aliens
+    // move Aliens
     // only if projectile is not between aliens
     bool projectileBetweenAliens = false;
     if(projectileGalaxip.isAlive()) {
@@ -140,8 +140,19 @@ void Model::moveAliens() {
                 }
             }
         }
+        // random number between 0 and 30
+        /*int randomNumber = rand() % 30;
+        if(greenAliens[randomNumber].isAlive() && attack) {
+            greenAliens[randomNumber].setAttackMode(true);
+            attack = false;
+        }*/
+
         for(int i = 0; i < 30; i++) {
-            greenAliens[i].moveAlienAlongXAxis();
+            //if(greenAliens[i].isInAttackMode()) {
+             //   greenAliens[i].moveAlien();
+            //} else {
+                greenAliens[i].moveAlienAlongXAxis();
+            //}
         }
         for(int i = 0; i < 8; i++) {
             blueAliens[i].moveAlienAlongXAxis();
@@ -266,6 +277,9 @@ bool Model::intersects(SDL_Rect rect1, SDL_Rect rect2) {
 
 bool Model::changeAlienDisplay() {
   if((SDL_GetTicks() - lastAlienDisplayChange) > 400) {
+///
+   // attack = true;
+///
     if(alienFormationState < 3) {
       alienFormationState = alienFormationState + 1;
     } else {

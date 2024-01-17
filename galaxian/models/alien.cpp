@@ -6,6 +6,7 @@ Alien::Alien() {
   rect.x = 110;
   realX = 110;
   rect.y = 143;
+  realY = 143;
   lastUpdate = SDL_GetTicks();
 }
 
@@ -20,6 +21,7 @@ void Alien::setX(int x) {
 
 void Alien::setY(int y) {
   rect.y = y;
+  realY = y;
 }
 
 bool Alien::isAlive() const {
@@ -46,6 +48,21 @@ void Alien::setLastUpdate() {
   lastUpdate = SDL_GetTicks();
 }
 
+void Alien::moveAlien() {
+  if(attackMode) {
+    moveAttackingAlien();
+  } else {
+    moveAlienAlongXAxis();
+  }
+}
+
+void Alien::moveAttackingAlien() {
+  int dT = SDL_GetTicks() - lastUpdate;
+  realY = realY + 0.02327 * dT;
+  rect.y = (int)realY;
+  lastUpdate = SDL_GetTicks();
+}
+
 void Alien::moveAlienAlongXAxis() {
   int dT = SDL_GetTicks() - lastUpdate;
   if(direction == LEFT) {
@@ -63,4 +80,12 @@ int Alien::getTextureNumber() {
 
 void Alien::setTextureNumber(int texNum) {
   textureNumber = texNum;
+}
+
+void Alien::setAttackMode(bool attackMode) {
+  this->attackMode = attackMode;
+}
+
+bool Alien::isInAttackMode() const {
+  return attackMode;
 }
