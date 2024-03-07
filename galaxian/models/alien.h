@@ -6,7 +6,8 @@
 class Alien {
     public:
         enum Direction { LEFT, RIGHT };
-        Alien();
+        enum Type { GREEN, BLUE, RED, FLAGSHIP, NONE };
+        Alien(int position);
         SDL_Rect getRect() const;
         void setX(int x);
         void setY(int y);
@@ -22,6 +23,8 @@ class Alien {
         void setTextureNumber(int texNum);
         void setAttackMode(bool attackMode);
         bool isInAttackMode() const;
+        Type getType() const;
+        void setType(Type type);
     protected:
         float realX = 0.0f;
         float realY = 0.0f;
@@ -30,6 +33,7 @@ class Alien {
         SDL_Rect rect = SDL_Rect();
         bool alive = true;
         Direction direction = LEFT;
+        Type type;
         bool attackMode = false;
 };
 

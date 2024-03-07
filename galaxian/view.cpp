@@ -9,10 +9,7 @@ void View::render() {
     renderBackground();
 	renderGalaxip();
     renderGalaxipProjectile();
-    renderGreenAliens();
-    renderBlueAliens();
-    renderRedAliens();
-    renderFlagships();
+    renderAliens();
 
 	SDL_RenderPresent(renderer);
 }
@@ -34,58 +31,64 @@ void View::renderGalaxipProjectile() {
     SDL_RenderCopy(renderer, projectile_galaxip_tex, NULL, &projectile_galaxip_rect);
 }
 
-void View::renderGreenAliens() {
-    for (int i = 0; i < 30; i++) {
-        if(model.getGreenAlien(i).isAlive()) {
-            SDL_Rect green_alien_rect = model.getGreenAlien(i).getRect();
-            if(model.getGreenAlien(i).getTextureNumber() == 1) {
+void View::renderAliens() {
+    for(int i = 0; i < 60; i++) {
+        if(model.getAlienType(i) == Alien::Type::GREEN) {
+            renderGreenAlien(i);
+        } else if(model.getAlienType(i) == Alien::Type::BLUE) {
+            renderBlueAlien(i);
+        } else if(model.getAlienType(i) == Alien::Type::RED) {
+            renderRedAlien(i);
+        } else if(model.getAlienType(i) == Alien::Type::FLAGSHIP) {
+            renderFlagship(i);
+        }
+    }
+}
+
+void View::renderGreenAlien(int pos) {
+        if(model.getGreenAlien(pos).isAlive()) {
+            SDL_Rect green_alien_rect = model.getGreenAlien(pos).getRect();
+            if(model.getGreenAlien(pos).getTextureNumber() == 1) {
                 SDL_RenderCopy(renderer, green_alien1_tex, NULL, &green_alien_rect);
-            } else if(model.getGreenAlien(i).getTextureNumber() == 2) {
+            } else if(model.getGreenAlien(pos).getTextureNumber() == 2) {
                 SDL_RenderCopy(renderer, green_alien2_tex, NULL, &green_alien_rect);
             } else {
                 SDL_RenderCopy(renderer, green_alien3_tex, NULL, &green_alien_rect);
             }
         }
-    }
 }
 
-void View::renderBlueAliens() {
-    for (int i = 0; i < 8; i++) {
-        if(model.getBlueAlien(i).isAlive()) {
-            SDL_Rect blue_alien_rect = model.getBlueAlien(i).getRect();
-            if(model.getBlueAlien(i).getTextureNumber() == 1) {
+void View::renderBlueAlien(int pos) {
+        if(model.getBlueAlien(pos).isAlive()) {
+            SDL_Rect blue_alien_rect = model.getBlueAlien(pos).getRect();
+            if(model.getBlueAlien(pos).getTextureNumber() == 1) {
                 SDL_RenderCopy(renderer, blue_alien1_tex, NULL, &blue_alien_rect);
-            } else if(model.getBlueAlien(i).getTextureNumber() == 2) {
+            } else if(model.getBlueAlien(pos).getTextureNumber() == 2) {
                 SDL_RenderCopy(renderer, blue_alien2_tex, NULL, &blue_alien_rect);
             } else {
                 SDL_RenderCopy(renderer, blue_alien3_tex, NULL, &blue_alien_rect);
             }
         }
-    }
 }
 
-void View::renderRedAliens() {
-    for (int i = 0; i < 6; i++) {
-        if(model.getRedAlien(i).isAlive()) {
-            SDL_Rect red_alien_rect = model.getRedAlien(i).getRect();
-            if(model.getRedAlien(i).getTextureNumber() == 1) {
+void View::renderRedAlien(int pos) {
+        if(model.getRedAlien(pos).isAlive()) {
+            SDL_Rect red_alien_rect = model.getRedAlien(pos).getRect();
+            if(model.getRedAlien(pos).getTextureNumber() == 1) {
                 SDL_RenderCopy(renderer, red_alien1_tex, NULL, &red_alien_rect);
-            } else if(model.getRedAlien(i).getTextureNumber() == 2) {
+            } else if(model.getRedAlien(pos).getTextureNumber() == 2) {
                 SDL_RenderCopy(renderer, red_alien2_tex, NULL, &red_alien_rect);
             } else {
                 SDL_RenderCopy(renderer, red_alien3_tex, NULL, &red_alien_rect);
             }
         }
-    }
 }
 
-void View::renderFlagships() {
-    for (int i = 0; i < 10; i++) {
-        if(model.getFlagship(i).isAlive()) {
-            SDL_Rect flagship_rect = model.getFlagship(i).getRect();
+void View::renderFlagship(int pos) {
+        if(model.getFlagship(pos).isAlive()) {
+            SDL_Rect flagship_rect = model.getFlagship(pos).getRect();
             SDL_RenderCopy(renderer, flagship_tex, NULL, &flagship_rect);
         }
-    }
 }
 
 void View::renderBackground() {
