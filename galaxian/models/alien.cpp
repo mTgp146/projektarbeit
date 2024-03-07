@@ -1,13 +1,14 @@
 #include "alien.h"
 
-Alien::Alien() {
+Alien::Alien(int position) {
   rect.w = 22;
   rect.h = 11;
-  rect.x = 110;
-  realX = 110;
-  rect.y = 143;
-  realY = 143;
+  rect.x = 110+(position%10)*30;
+  realX = rect.x;
+  rect.y = 86+(position/10)*19;
+  realY = rect.y;
   lastUpdate = SDL_GetTicks();
+  type = NONE;
 }
 
 SDL_Rect Alien::getRect() const {
@@ -88,4 +89,12 @@ void Alien::setAttackMode(bool attackMode) {
 
 bool Alien::isInAttackMode() const {
   return attackMode;
+}
+
+Alien::Type Alien::getType() const {
+  return type;
+}
+
+void Alien::setType(Type type) {
+  this->type = type;
 }

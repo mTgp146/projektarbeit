@@ -1,7 +1,28 @@
 #include "model.h"
 
 void Model::initAliens() {
-    // init Green Aliens
+
+    for(int i = 0; i < 10; i++) {
+        aliens.push_back(Flagship{i});
+        std::get<Flagship>(aliens[i]).setType(Flagship::Type::FLAGSHIP);
+    }
+
+    for(int i = 10; i < 20; i++) {
+        aliens.push_back(RedAlien{i});
+        std::get<RedAlien>(aliens[i]).setType(RedAlien::Type::RED);
+    }
+
+    for(int i = 20; i < 30; i++) {
+        aliens.push_back(BlueAlien{i});
+        std::get<BlueAlien>(aliens[i]).setType(BlueAlien::Type::BLUE);
+    }
+
+    for(int i = 30; i < 60; i++) {
+        aliens.push_back(GreenAlien{i});
+        std::get<GreenAlien>(aliens[i]).setType(GreenAlien::Type::GREEN);
+    }
+
+    /* init Green Aliens
     for(int i = 0; i < 30; i++) {
         greenAliens[i].setPositionInFormation(i);
     }
@@ -20,7 +41,7 @@ void Model::initAliens() {
         } else {
             flagships[i].setAlive(false);
         }
-    }
+    }*/
 }
 
 Galaxip Model::getGalaxip() {
@@ -36,19 +57,32 @@ Projectile Model::getGalaxipProjectile() {
 }
 
 GreenAlien Model::getGreenAlien(int index) {
-    return greenAliens[index];
+    return std::get<GreenAlien>(aliens[index]);
 }
 
 BlueAlien Model::getBlueAlien(int index) {
-    return blueAliens[index];
+    return std::get<BlueAlien>(aliens[index]);
 }
 
 RedAlien Model::getRedAlien(int index) {
-    return redAliens[index];
+    return std::get<RedAlien>(aliens[index]);
 }
 
 Flagship Model::getFlagship(int index) {
-    return flagships[index];
+    return std::get<Flagship>(aliens[index]);
+}
+
+Alien::Type Model::getAlienType(int index) {
+    Alien::Type type = Alien::Type::NONE;
+    if(std::holds_alternative<GreenAlien>(aliens[index]))
+        type = Alien::Type::GREEN;
+    else if(std::holds_alternative<BlueAlien>(aliens[index]))
+        type = Alien::Type::BLUE;
+    else if(std::holds_alternative<RedAlien>(aliens[index]))
+        type = Alien::Type::RED;
+    else if(std::holds_alternative<Flagship>(aliens[index]))
+        type = Alien::Type::FLAGSHIP;
+    return type;
 }
 
 void Model::moveGalaxip(enum Galaxip::Direction direction) {
@@ -93,7 +127,7 @@ void Model::moveGalaxipProjectile() {
 void Model::moveAliens() {
     // move Aliens
     // only if projectile is not between aliens
-    bool projectileBetweenAliens = false;
+/*    bool projectileBetweenAliens = false;
     if(projectileGalaxip.isAlive()) {
         for(int i = 0; i < 10; i++) {
             if((projectileGalaxip.getRect().x > greenAliens[i].getRect().x + greenAliens[i].getRect().w 
@@ -146,7 +180,7 @@ void Model::moveAliens() {
             greenAliens[randomNumber].setAttackMode(true);
             attack = false;
         }*/
-
+/*
         for(int i = 0; i < 30; i++) {
             //if(greenAliens[i].isInAttackMode()) {
              //   greenAliens[i].moveAlien();
@@ -176,12 +210,12 @@ void Model::moveAliens() {
         for(int i = 0; i < 10; i++) {
             flagships[i].setLastUpdate();
         }
-    }
+    }*/
 }
 
 void Model::collisionCheck() {
     // check if Galaxip Projectile intersects with Green Aliens
-    for(int i = 0; i < 30; i++) {
+   /* for(int i = 0; i < 30; i++) {
         if(greenAliens[i].isAlive() && intersects(projectileGalaxip.getRect(), greenAliens[i].getRect())) {
             greenAliens[i].setAlive(false);
             resetGalaxipProjectile();
@@ -207,12 +241,12 @@ void Model::collisionCheck() {
             flagships[i].setAlive(false);
             resetGalaxipProjectile();
         }
-    }
+    }*/
 }
 
 void Model::alienDisplayChanger() {
     // change alien display
-    if(changeAlienDisplay()) {
+   /* if(changeAlienDisplay()) {
         for(int i = 0; i < 30; i++) {
             int xPosGA = i%10;
             bool tex_1 = false;
@@ -263,7 +297,7 @@ void Model::alienDisplayChanger() {
         for(int i = 0; i < 6; i++) {
             redAliens[i].setTextureNumber(greenAliens[i+2].getTextureNumber());
         }
-    }
+    }*/
 }
 
 bool Model::intersects(SDL_Rect rect1, SDL_Rect rect2) {

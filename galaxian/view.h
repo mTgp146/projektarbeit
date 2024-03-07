@@ -10,10 +10,11 @@ class View {
     void render();
     void renderGalaxip();
     void renderGalaxipProjectile();
-    void renderGreenAliens();
-    void renderBlueAliens();
-    void renderRedAliens();
-    void renderFlagships();
+    void renderAliens();
+    void renderGreenAlien(int pos);
+    void renderBlueAlien(int pos);
+    void renderRedAlien(int pos);
+    void renderFlagship(int pos);
     void renderBackground();
     void exit();
 
