@@ -33,10 +33,10 @@ class Model {
         int lastAlienDisplayChange = SDL_GetTicks();
         int alienFormationState = 0;
         Galaxip galaxip;
-        std::array<GreenAlien, 30> greenAliens = {};
-        std::array<BlueAlien, 8> blueAliens = {};
-        std::array<RedAlien, 6> redAliens = {};
-        std::array<Flagship, 10> flagships = {};
+        std::array<GreenAlien, 60> greenAliens = {};
+        std::array<BlueAlien, 60> blueAliens = {};
+        std::array<RedAlien, 60> redAliens = {};
+        std::array<Flagship, 60> flagships = {};
         Projectile projectileGalaxip{Projectile::TYPE::GALAXIP, galaxip.getRect().x+15, galaxip.getRect().y-8};
         Background background;
         ///

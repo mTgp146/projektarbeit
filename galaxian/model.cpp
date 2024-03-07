@@ -1,26 +1,91 @@
 #include "model.h"
+#include <cstdio>
 
 void Model::initAliens() {
+    FILE *file;
+    file = fopen("alien_formation_standard.txt", "r");
+    char row1[100];
+    char row2[100];
+    char row3[100];
+    char row4[100];
+    char row5[100];
+    char row6[100];
+    std::array<char, 60> formation = {};
+    fgets(row1, 100, file);
+    for(int i = 0; i < 10; i++) {
+        formation[i] = row1[i];
+    }
+    fgets(row2, 100, file);
+    for(int i = 0; i < 10; i++) {
+        formation[i+10] = row2[i];
+    }
+    fgets(row3, 100, file);
+    for(int i = 0; i < 10; i++) {
+        formation[i+20] = row3[i];
+    }
+    fgets(row4, 100, file);
+    for(int i = 0; i < 10; i++) {
+        formation[i+30] = row4[i];
+    }
+    fgets(row5, 100, file);
+    for(int i = 0; i < 10; i++) {
+        formation[i+40] = row5[i];
+    }
+    fgets(row6, 100, file);
+    for(int i = 0; i < 10; i++) {
+        formation[i+50] = row6[i];
+    }
+
+    //print formation
+    printf("Formation:\n");
+    for(int i = 0; i < 60; i++) {
+        printf("%c", formation[i]);
+        if(i%10 == 9) {
+            printf("\n");
+        }
+    }
+
     // init Green Aliens
-    for(int i = 0; i < 30; i++) {
+    for(int i = 0; i < 60; i++) {
+        if(formation[i] == 'G') {
+            greenAliens[i].setInGame(true);
+        }
         greenAliens[i].setPositionInFormation(i);
     }
     // init Blue Aliens
-    for(int i = 0; i < 8; i++) {
+    for(int i = 0; i < 60; i++) {
+        if(formation[i] == 'B') {
+            blueAliens[i].setInGame(true);
+        }
         blueAliens[i].setPositionInFormation(i);
     }
     // init Red Aliens
-    for(int i = 0; i < 6; i++) {
+    for(int i = 0; i < 60; i++) {
+        if(formation[i] == 'R') {
+            redAliens[i].setInGame(true);
+        }
         redAliens[i].setPositionInFormation(i);
     }
     // init Flagships
-    for(int i = 0; i < 10; i++) {
-        if(i == 3 || i == 6) {
-            flagships[i].setPositionInFormation(i);
-        } else {
-            flagships[i].setAlive(false);
+    for(int i = 0; i < 60; i++) {
+        if(formation[i] == 'F') {
+            flagships[i].setInGame(true);
         }
+        flagships[i].setPositionInFormation(i);
     }
+/*
+    for(int i = 30; i < 60; i++) {
+        greenAliens[i].setInGame(true);
+    }
+    for(int i = 21; i < 29; i++) {
+        blueAliens[i].setInGame(true);
+    }
+    for(int i = 12; i < 18; i++) {
+        redAliens[i].setInGame(true);
+    }
+    flagships[3].setInGame(true);
+    flagships[6].setInGame(true);
+*/
 }
 
 Galaxip Model::getGalaxip() {
@@ -111,31 +176,31 @@ void Model::moveAliens() {
     if(!projectileBetweenAliens) {
         if(greenAliens[0].getDirection() == GreenAlien::Direction::LEFT) {
             if(greenAliens[0].getRect().x <= 76) {
-                for(int i = 0; i < 30; i++) {
+                for(int i = 0; i < 60; i++) {
                     greenAliens[i].changeDirection();
                 }
-                for(int i = 0; i < 8; i++) {
+                for(int i = 0; i < 60; i++) {
                     blueAliens[i].changeDirection();
                 }
-                for(int i = 0; i < 6; i++) {
+                for(int i = 0; i < 60; i++) {
                     redAliens[i].changeDirection();
                 }
-                for(int i = 0; i < 10; i++) {
+                for(int i = 0; i < 60; i++) {
                     flagships[i].changeDirection();
                 }
             }
         } else {
             if(greenAliens[0].getRect().x >= 140) {
-                for(int i = 0; i < 30; i++) {
+                for(int i = 0; i < 60; i++) {
                     greenAliens[i].changeDirection();
                 }
-                for(int i = 0; i < 8; i++) {
+                for(int i = 0; i < 60; i++) {
                     blueAliens[i].changeDirection();
                 }
-                for(int i = 0; i < 6; i++) {
+                for(int i = 0; i < 60; i++) {
                     redAliens[i].changeDirection();
                 }
-                for(int i = 0; i < 10; i++) {
+                for(int i = 0; i < 60; i++) {
                     flagships[i].changeDirection();
                 }
             }
@@ -147,33 +212,33 @@ void Model::moveAliens() {
             attack = false;
         }*/
 
-        for(int i = 0; i < 30; i++) {
+        for(int i = 0; i < 60; i++) {
             //if(greenAliens[i].isInAttackMode()) {
              //   greenAliens[i].moveAlien();
             //} else {
                 greenAliens[i].moveAlienAlongXAxis();
             //}
         }
-        for(int i = 0; i < 8; i++) {
+        for(int i = 0; i < 60; i++) {
             blueAliens[i].moveAlienAlongXAxis();
         }
-        for(int i = 0; i < 6; i++) {
+        for(int i = 0; i < 60; i++) {
             redAliens[i].moveAlienAlongXAxis();
         }
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 60; i++) {
             flagships[i].moveAlienAlongXAxis();
         }
     } else {
-        for(int i = 0; i < 30; i++) {
+        for(int i = 0; i < 60; i++) {
             greenAliens[i].setLastUpdate();
         }
-        for(int i = 0; i < 8; i++) {
+        for(int i = 0; i < 60; i++) {
             blueAliens[i].setLastUpdate();
         }
-        for(int i = 0; i < 6; i++) {
+        for(int i = 0; i < 60; i++) {
             redAliens[i].setLastUpdate();
         }
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 60; i++) {
             flagships[i].setLastUpdate();
         }
     }
@@ -181,29 +246,29 @@ void Model::moveAliens() {
 
 void Model::collisionCheck() {
     // check if Galaxip Projectile intersects with Green Aliens
-    for(int i = 0; i < 30; i++) {
-        if(greenAliens[i].isAlive() && intersects(projectileGalaxip.getRect(), greenAliens[i].getRect())) {
+    for(int i = 0; i < 60; i++) {
+        if(greenAliens[i].isInGame() && greenAliens[i].isAlive() && intersects(projectileGalaxip.getRect(), greenAliens[i].getRect())) {
             greenAliens[i].setAlive(false);
             resetGalaxipProjectile();
         }
     }
     // check if Galaxip Projectile intersects with Blue Aliens
-    for(int i = 0; i < 8; i++) {
-        if(blueAliens[i].isAlive() && intersects(projectileGalaxip.getRect(), blueAliens[i].getRect())) {
+    for(int i = 0; i < 60; i++) {
+        if(blueAliens[i].isInGame() && blueAliens[i].isAlive() && intersects(projectileGalaxip.getRect(), blueAliens[i].getRect())) {
             blueAliens[i].setAlive(false);
             resetGalaxipProjectile();
         }
     }
     // check if Galaxip Projectile intersects with Red Aliens
-    for(int i = 0; i < 6; i++) {
-        if(redAliens[i].isAlive() && intersects(projectileGalaxip.getRect(), redAliens[i].getRect())) {
+    for(int i = 0; i < 60; i++) {
+        if(redAliens[i].isInGame() && redAliens[i].isAlive() && intersects(projectileGalaxip.getRect(), redAliens[i].getRect())) {
             redAliens[i].setAlive(false);
             resetGalaxipProjectile();
         }
     }
     // check if Galaxip Projectile intersects with Flagships
-    for(int i = 0; i < 10; i++) {
-        if(flagships[i].isAlive() && intersects(projectileGalaxip.getRect(), flagships[i].getRect())) {
+    for(int i = 0; i < 60; i++) {
+        if(flagships[i].isInGame() && flagships[i].isAlive() && intersects(projectileGalaxip.getRect(), flagships[i].getRect())) {
             flagships[i].setAlive(false);
             resetGalaxipProjectile();
         }
@@ -213,7 +278,7 @@ void Model::collisionCheck() {
 void Model::alienDisplayChanger() {
     // change alien display
     if(changeAlienDisplay()) {
-        for(int i = 0; i < 30; i++) {
+        for(int i = 0; i < 60; i++) {
             int xPosGA = i%10;
             bool tex_1 = false;
             bool tex_2 = false;
@@ -251,17 +316,17 @@ void Model::alienDisplayChanger() {
             }
             if(tex_1) {
                 greenAliens[i].setTextureNumber(1);
+                blueAliens[i].setTextureNumber(1);
+                redAliens[i].setTextureNumber(1);
             } else if(tex_2) {
                 greenAliens[i].setTextureNumber(2);
+                blueAliens[i].setTextureNumber(2);
+                redAliens[i].setTextureNumber(2);
             } else {
                 greenAliens[i].setTextureNumber(3);
+                blueAliens[i].setTextureNumber(3);
+                redAliens[i].setTextureNumber(3);
             }
-        }
-        for(int i = 0; i < 8; i++) {
-            blueAliens[i].setTextureNumber(greenAliens[i+1].getTextureNumber());
-        }
-        for(int i = 0; i < 6; i++) {
-            redAliens[i].setTextureNumber(greenAliens[i+2].getTextureNumber());
         }
     }
 }

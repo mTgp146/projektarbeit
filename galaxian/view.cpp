@@ -35,8 +35,8 @@ void View::renderGalaxipProjectile() {
 }
 
 void View::renderGreenAliens() {
-    for (int i = 0; i < 30; i++) {
-        if(model.getGreenAlien(i).isAlive()) {
+    for (int i = 0; i < 60; i++) {
+        if(model.getGreenAlien(i).isAlive() && model.getGreenAlien(i).isInGame())	{
             SDL_Rect green_alien_rect = model.getGreenAlien(i).getRect();
             if(model.getGreenAlien(i).getTextureNumber() == 1) {
                 SDL_RenderCopy(renderer, green_alien1_tex, NULL, &green_alien_rect);
@@ -50,8 +50,8 @@ void View::renderGreenAliens() {
 }
 
 void View::renderBlueAliens() {
-    for (int i = 0; i < 8; i++) {
-        if(model.getBlueAlien(i).isAlive()) {
+    for (int i = 0; i < 60; i++) {
+        if(model.getBlueAlien(i).isAlive() && model.getBlueAlien(i).isInGame()) {
             SDL_Rect blue_alien_rect = model.getBlueAlien(i).getRect();
             if(model.getBlueAlien(i).getTextureNumber() == 1) {
                 SDL_RenderCopy(renderer, blue_alien1_tex, NULL, &blue_alien_rect);
@@ -65,8 +65,8 @@ void View::renderBlueAliens() {
 }
 
 void View::renderRedAliens() {
-    for (int i = 0; i < 6; i++) {
-        if(model.getRedAlien(i).isAlive()) {
+    for (int i = 0; i < 60; i++) {
+        if(model.getRedAlien(i).isAlive() && model.getRedAlien(i).isInGame()) {
             SDL_Rect red_alien_rect = model.getRedAlien(i).getRect();
             if(model.getRedAlien(i).getTextureNumber() == 1) {
                 SDL_RenderCopy(renderer, red_alien1_tex, NULL, &red_alien_rect);
@@ -80,8 +80,8 @@ void View::renderRedAliens() {
 }
 
 void View::renderFlagships() {
-    for (int i = 0; i < 10; i++) {
-        if(model.getFlagship(i).isAlive()) {
+    for (int i = 0; i < 60; i++) {
+        if(model.getFlagship(i).isAlive() && model.getFlagship(i).isInGame()) {
             SDL_Rect flagship_rect = model.getFlagship(i).getRect();
             SDL_RenderCopy(renderer, flagship_tex, NULL, &flagship_rect);
         }

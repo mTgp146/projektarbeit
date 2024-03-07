@@ -22,6 +22,9 @@ class Alien {
         void setTextureNumber(int texNum);
         void setAttackMode(bool attackMode);
         bool isInAttackMode() const;
+        void setInGame(bool inGame);
+        bool isInGame() const;
+        void setPositionInFormation(int position);
     protected:
         float realX = 0.0f;
         float realY = 0.0f;
@@ -29,6 +32,7 @@ class Alien {
         int textureNumber = 1;
         SDL_Rect rect = SDL_Rect();
         bool alive = true;
+        bool inGame = false;
         Direction direction = LEFT;
         bool attackMode = false;
 };

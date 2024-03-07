@@ -2,5 +2,4 @@
 
 class RedAlien : public Alien {
     public:
-        void setPositionInFormation(int position);
 };

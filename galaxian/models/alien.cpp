@@ -89,3 +89,17 @@ void Alien::setAttackMode(bool attackMode) {
 bool Alien::isInAttackMode() const {
   return attackMode;
 }
+
+void Alien::setInGame(bool inGame) {
+  this->inGame = inGame;
+}
+
+bool Alien::isInGame() const {
+  return inGame;
+}
+
+void Alien::setPositionInFormation(int position) {
+  rect.x = 110+(position%10)*30;
+  realX = rect.x;
+  rect.y = 86 + 19*((position/10));
+}
