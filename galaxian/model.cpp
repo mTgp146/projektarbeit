@@ -36,15 +36,6 @@ void Model::initAliens() {
         formation[i+50] = row6[i];
     }
 
-    //print formation
-    printf("Formation:\n");
-    for(int i = 0; i < 60; i++) {
-        printf("%c", formation[i]);
-        if(i%10 == 9) {
-            printf("\n");
-        }
-    }
-
     // init Green Aliens
     for(int i = 0; i < 60; i++) {
         if(formation[i] == 'G') {
@@ -52,6 +43,7 @@ void Model::initAliens() {
         }
         greenAliens[i].setPositionInFormation(i);
     }
+
     // init Blue Aliens
     for(int i = 0; i < 60; i++) {
         if(formation[i] == 'B') {
@@ -59,6 +51,7 @@ void Model::initAliens() {
         }
         blueAliens[i].setPositionInFormation(i);
     }
+
     // init Red Aliens
     for(int i = 0; i < 60; i++) {
         if(formation[i] == 'R') {
@@ -66,6 +59,7 @@ void Model::initAliens() {
         }
         redAliens[i].setPositionInFormation(i);
     }
+
     // init Flagships
     for(int i = 0; i < 60; i++) {
         if(formation[i] == 'F') {
@@ -73,19 +67,6 @@ void Model::initAliens() {
         }
         flagships[i].setPositionInFormation(i);
     }
-/*
-    for(int i = 30; i < 60; i++) {
-        greenAliens[i].setInGame(true);
-    }
-    for(int i = 21; i < 29; i++) {
-        blueAliens[i].setInGame(true);
-    }
-    for(int i = 12; i < 18; i++) {
-        redAliens[i].setInGame(true);
-    }
-    flagships[3].setInGame(true);
-    flagships[6].setInGame(true);
-*/
 }
 
 Galaxip Model::getGalaxip() {
@@ -123,6 +104,7 @@ void Model::moveGalaxip(enum Galaxip::Direction direction) {
 void Model::shotByGalaxip() {
     if(!projectileGalaxip.isAlive()) {
         projectileGalaxip.setAlive(true);
+        sounds.playShot();
     }
 }
 
@@ -248,29 +230,37 @@ void Model::collisionCheck() {
     // check if Galaxip Projectile intersects with Green Aliens
     for(int i = 0; i < 60; i++) {
         if(greenAliens[i].isInGame() && greenAliens[i].isAlive() && intersects(projectileGalaxip.getRect(), greenAliens[i].getRect())) {
+            sounds.playExplosion();
             greenAliens[i].setAlive(false);
             resetGalaxipProjectile();
+            points.addPoints(Points::Values::GREEN_FORMATION);
         }
     }
     // check if Galaxip Projectile intersects with Blue Aliens
     for(int i = 0; i < 60; i++) {
         if(blueAliens[i].isInGame() && blueAliens[i].isAlive() && intersects(projectileGalaxip.getRect(), blueAliens[i].getRect())) {
+            sounds.playExplosion();
             blueAliens[i].setAlive(false);
             resetGalaxipProjectile();
+            points.addPoints(Points::Values::BLUE_FORMATION);
         }
     }
     // check if Galaxip Projectile intersects with Red Aliens
     for(int i = 0; i < 60; i++) {
         if(redAliens[i].isInGame() && redAliens[i].isAlive() && intersects(projectileGalaxip.getRect(), redAliens[i].getRect())) {
+            sounds.playExplosion();
             redAliens[i].setAlive(false);
             resetGalaxipProjectile();
+            points.addPoints(Points::Values::RED_FORMATION);
         }
     }
     // check if Galaxip Projectile intersects with Flagships
     for(int i = 0; i < 60; i++) {
         if(flagships[i].isInGame() && flagships[i].isAlive() && intersects(projectileGalaxip.getRect(), flagships[i].getRect())) {
+            sounds.playExplosion();
             flagships[i].setAlive(false);
             resetGalaxipProjectile();
+            points.addPoints(Points::Values::FLAGSHIP_FORMATION);
         }
     }
 }
@@ -362,4 +352,20 @@ void Model::updateBackground() {
 
 std::array<BackgroundParticle, 128> Model::getBackgroundParticles() {
     return background.getParticles();
+}
+
+void Model::startMusic() {
+    sounds.playBackground();
+}
+
+void Model::addPoints(Points::Values value) {
+    points.addPoints(value);
+}
+
+int Model::getPoints() {
+    return points.getPoints();
+}
+
+void Model::resetPoints() {
+    points.resetPoints();
 }

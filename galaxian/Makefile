@@ -1,2 +1,2 @@
 all:
-	g++ -I src/include -L src/lib -o game main_controller.cpp view.cpp controller.cpp model.cpp models/galaxip.cpp models/projectile.cpp models/green_alien.cpp models/blue_alien.cpp models/red_alien.cpp models/flagship.cpp models/alien.cpp models/background.cpp models/backgroundParticle.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image
+	g++ -I src/include -L src/lib -o game main_controller.cpp view.cpp controller.cpp model.cpp models/galaxip.cpp models/projectile.cpp models/green_alien.cpp models/blue_alien.cpp models/red_alien.cpp models/flagship.cpp models/alien.cpp models/background.cpp models/backgroundParticle.cpp models/sounds.cpp models/points.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer

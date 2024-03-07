@@ -36,6 +36,7 @@ void Controller::mainLoop() {
 
 void Controller::init() {
     model.initAliens();
+    model.startMusic();
 }
 
 void Controller::gameActions() {

@@ -15,6 +15,7 @@ class View {
     void renderRedAliens();
     void renderFlagships();
     void renderBackground();
+    void renderScore();
     void exit();
 
   private:
@@ -44,6 +45,26 @@ class View {
     SDL_Surface* red_alien3_sur;
     SDL_Texture* flagship_tex;
     SDL_Surface* flagship_sur;
+    SDL_Texture* num_0_tex;
+    SDL_Surface* num_0_sur;
+    SDL_Texture* num_1_tex;
+    SDL_Surface* num_1_sur;
+    SDL_Texture* num_2_tex;
+    SDL_Surface* num_2_sur;
+    SDL_Texture* num_3_tex;
+    SDL_Surface* num_3_sur;
+    SDL_Texture* num_4_tex;
+    SDL_Surface* num_4_sur;
+    SDL_Texture* num_5_tex;
+    SDL_Surface* num_5_sur;
+    SDL_Texture* num_6_tex;
+    SDL_Surface* num_6_sur;
+    SDL_Texture* num_7_tex;
+    SDL_Surface* num_7_sur;
+    SDL_Texture* num_8_tex;
+    SDL_Surface* num_8_sur;
+    SDL_Texture* num_9_tex;
+    SDL_Surface* num_9_sur;
     SDL_Renderer* renderer;
     SDL_Window *window;
     Model &model;

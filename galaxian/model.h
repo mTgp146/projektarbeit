@@ -5,6 +5,8 @@
 #include "models/red_alien.h"
 #include "models/flagship.h"
 #include "models/background.h"
+#include "models/sounds.h"
+#include "models/points.h"
 #include <array>
 
 class Model {
@@ -29,6 +31,10 @@ class Model {
         void collisionCheck();
         void updateBackground();
         std::array<BackgroundParticle, 128> getBackgroundParticles();
+        void startMusic();
+        void addPoints(Points::Values value);
+        int getPoints();
+        void resetPoints();
     private:
         int lastAlienDisplayChange = SDL_GetTicks();
         int alienFormationState = 0;
@@ -39,7 +45,6 @@ class Model {
         std::array<Flagship, 60> flagships = {};
         Projectile projectileGalaxip{Projectile::TYPE::GALAXIP, galaxip.getRect().x+15, galaxip.getRect().y-8};
         Background background;
-        ///
-        //bool attack = false;
-        ///
+        Sounds sounds;
+        Points points;
 };

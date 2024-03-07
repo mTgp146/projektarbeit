@@ -13,6 +13,7 @@ void View::render() {
     renderBlueAliens();
     renderRedAliens();
     renderFlagships();
+    renderScore();
 
 	SDL_RenderPresent(renderer);
 }
@@ -99,6 +100,40 @@ void View::renderBackground() {
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         }
     }
+}
+
+void View::renderScore() {
+    int points = model.getPoints();
+    int digit = 0;
+    int x = 0;
+    do {
+        digit = points % 10;
+        points = points / 10;
+        SDL_Rect num_rect = {WIDTH - 12 - x, 16, 8, 10};
+        if(digit == 0) {
+            SDL_RenderCopy(renderer, num_0_tex, NULL, &num_rect);
+        } else if(digit == 1) {
+            SDL_RenderCopy(renderer, num_1_tex, NULL, &num_rect);
+        } else if(digit == 2) {
+            SDL_RenderCopy(renderer, num_2_tex, NULL, &num_rect);
+        } else if(digit == 3) {
+            SDL_RenderCopy(renderer, num_3_tex, NULL, &num_rect);
+        } else if(digit == 4) {
+            SDL_RenderCopy(renderer, num_4_tex, NULL, &num_rect);
+        } else if(digit == 5) {
+            SDL_RenderCopy(renderer, num_5_tex, NULL, &num_rect);
+        } else if(digit == 6) {
+            SDL_RenderCopy(renderer, num_6_tex, NULL, &num_rect);
+        } else if(digit == 7) {
+            SDL_RenderCopy(renderer, num_7_tex, NULL, &num_rect);
+        } else if(digit == 8) {
+            SDL_RenderCopy(renderer, num_8_tex, NULL, &num_rect);
+        } else {
+            SDL_RenderCopy(renderer, num_9_tex, NULL, &num_rect);
+        }
+        x += 16;
+    } while (points > 0	);
+    
 }
 
 void View::exit() {
@@ -189,6 +224,45 @@ int View::init() {
     flagship_tex = SDL_CreateTextureFromSurface(renderer, flagship_sur);
     SDL_FreeSurface(flagship_sur);
 
-    return 0;
+    num_0_sur = IMG_Load("images/0.png");
+    num_0_tex = SDL_CreateTextureFromSurface(renderer, num_0_sur);
+    SDL_FreeSurface(num_0_sur);
 
+    num_1_sur = IMG_Load("images/1.png");
+    num_1_tex = SDL_CreateTextureFromSurface(renderer, num_1_sur);
+    SDL_FreeSurface(num_1_sur);
+
+    num_2_sur = IMG_Load("images/2.png");
+    num_2_tex = SDL_CreateTextureFromSurface(renderer, num_2_sur);
+    SDL_FreeSurface(num_2_sur);
+
+    num_3_sur = IMG_Load("images/3.png");
+    num_3_tex = SDL_CreateTextureFromSurface(renderer, num_3_sur);
+    SDL_FreeSurface(num_3_sur);
+
+    num_4_sur = IMG_Load("images/4.png");
+    num_4_tex = SDL_CreateTextureFromSurface(renderer, num_4_sur);
+    SDL_FreeSurface(num_4_sur);
+
+    num_5_sur = IMG_Load("images/5.png");
+    num_5_tex = SDL_CreateTextureFromSurface(renderer, num_5_sur);
+    SDL_FreeSurface(num_5_sur);
+
+    num_6_sur = IMG_Load("images/6.png");
+    num_6_tex = SDL_CreateTextureFromSurface(renderer, num_6_sur);
+    SDL_FreeSurface(num_6_sur);
+
+    num_7_sur = IMG_Load("images/7.png");
+    num_7_tex = SDL_CreateTextureFromSurface(renderer, num_7_sur);
+    SDL_FreeSurface(num_7_sur);
+
+    num_8_sur = IMG_Load("images/8.png");
+    num_8_tex = SDL_CreateTextureFromSurface(renderer, num_8_sur);
+    SDL_FreeSurface(num_8_sur);
+
+    num_9_sur = IMG_Load("images/9.png");
+    num_9_tex = SDL_CreateTextureFromSurface(renderer, num_9_sur);
+    SDL_FreeSurface(num_9_sur);
+
+    return 0;
 }
