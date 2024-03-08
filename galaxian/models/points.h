@@ -1,5 +1,11 @@
+/**
+ * The Points class represents the points of the player in the game.
+*/
 class Points {
 public:
+    /**
+     * The Values enum represents the different values of the aliens.
+    */
     enum Values {
         GREEN_FORMATION = 30,
         GREEN_ATTACK = 60,
@@ -13,9 +19,19 @@ public:
         FLAGSHIP_ATTACK_TRIO_NOT_LAST = 300,
         FLAGSHIP_ATTACK_TRIO_LAST = 800
     };
+    /**
+     * Adds points to the player's score.
+     * @param value The value of the alien that was destroyed.
+    */
     void addPoints(Values value);
     int getPoints();
+    /**
+     * Resets the points of the player to 0.
+    */
     void resetPoints();
 private:
+    /**
+     * The current points of the player.
+    */
     int points = 0;
 };

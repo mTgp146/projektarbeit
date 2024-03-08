@@ -2,11 +2,28 @@
 #include "SDL2/SDL_image.h"
 #include "model.h"
 
+/**
+ * The View class is responsible for rendering the game state.
+ 
+*/
 class View {
 
   public:
+    /**
+     * Constructor of the View class.
+     * @param model The model of the game.
+    */
     View(Model &model);
+    /**
+     * Initializes the game.
+     * It initializes the SDL library, the window and the renderer.
+    */
     int init();
+    /**
+     * Renders the game state.
+     * This method is called every frame.
+     * It calles the render methods of the different game objects.
+    */
     void render();
     void renderGalaxip();
     void renderGalaxipProjectile();
@@ -16,6 +33,10 @@ class View {
     void renderFlagships();
     void renderBackground();
     void renderScore();
+    /**
+     * Exits the game.
+     * It frees the memory used by the textures and the renderer.
+    */
     void exit();
 
   private:
