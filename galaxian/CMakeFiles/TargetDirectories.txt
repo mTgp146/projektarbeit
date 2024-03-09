@@ -1,0 +1,4 @@
+/home/computergrafik/Desktop/project/projektarbeit/projektarbeit/galaxian/CMakeFiles/game_test.dir
+/home/computergrafik/Desktop/project/projektarbeit/projektarbeit/galaxian/CMakeFiles/test.dir
+/home/computergrafik/Desktop/project/projektarbeit/projektarbeit/galaxian/CMakeFiles/edit_cache.dir
+/home/computergrafik/Desktop/project/projektarbeit/projektarbeit/galaxian/CMakeFiles/rebuild_cache.dir
