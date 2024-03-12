@@ -26,6 +26,7 @@ public:
   void moveGalaxip(Direction direction);
   int getLives() const;
   bool loseLife();
+  void setLives(int lives);
   bool isAlive() const;
   void setAlive(bool alive);
   int getDyingAnimationCounter() const;

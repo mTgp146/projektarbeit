@@ -2,6 +2,7 @@
 
 class ProjectileAlien : public Projectile {
     public:
+        enum Types { G, B, R, F};
         /**
          * The constructor of the ProjectileAlien class.
          * @param x The x coordinate of the projectile.
@@ -11,7 +12,7 @@ class ProjectileAlien : public Projectile {
         /**
          * Moves the projectile in the game by a defined amount.
          */
-        void shoot(int x, int y, int galaxipPosX);
+        void shoot(int x, int y, int galaxipPosX, Types type);
         void moveProjectile();
     private:
         float realX = 0.0f;
@@ -19,4 +20,5 @@ class ProjectileAlien : public Projectile {
         float initialX = 0.0f;
         float initialY = 0.0f;
         float heightOfGalaxip = 448.0f;
+        Types type;
 };

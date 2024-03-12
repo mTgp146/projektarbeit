@@ -1,8 +1,5 @@
 #include "models/galaxip.h"
-#include "models/green_alien.h"
-#include "models/blue_alien.h"
-#include "models/red_alien.h"
-#include "models/flagship.h"
+#include "models/alien.h"
 #include "models/background.h"
 #include "models/sounds.h"
 #include "models/points.h"
@@ -29,10 +26,10 @@ class Model {
         void setGalaxipDT();
         ProjectileGalaxip getGalaxipProjectile();
         ProjectileAlien getAlienProjectile(int index);
-        GreenAlien getGreenAlien(int index);
-        BlueAlien getBlueAlien(int index);
-        RedAlien getRedAlien(int index);
-        Flagship getFlagship(int index);
+        Alien getGreenAlien(int index);
+        Alien getBlueAlien(int index);
+        Alien getRedAlien(int index);
+        Alien getFlagship(int index);
         /**
          * Moves the Galaxip in the game.
          * @param direction The direction in which the Galaxip is moving.
@@ -146,15 +143,25 @@ class Model {
          * @return the new attacking alien
          */
         int getNewAttackingAlien(int i);
+        void setGameOver(bool gameOver);
+        bool isGameOver();
+        /**
+         * Check if the game is over and start it new.
+         */
+        void checkGameOver();
+        /**
+         * Check if all aliens are dead and respawn them.
+         */
+        void checkIfAllAliensAreDead();
 
     private:
         int lastAlienDisplayChange = SDL_GetTicks();
         int alienFormationState = 0;
         Galaxip galaxip;
-        std::array<GreenAlien, 60> greenAliens = {};
-        std::array<BlueAlien, 60> blueAliens = {};
-        std::array<RedAlien, 60> redAliens = {};
-        std::array<Flagship, 60> flagships = {};
+        std::array<Alien, 60> greenAliens = {};
+        std::array<Alien, 60> blueAliens = {};
+        std::array<Alien, 60> redAliens = {};
+        std::array<Alien, 60> flagships = {};
         ProjectileGalaxip projectileGalaxip{galaxip.getRect().x+15, galaxip.getRect().y-8};
         std::array<ProjectileAlien, 2> projectilesAlien = {};
         Background background;
@@ -166,4 +173,5 @@ class Model {
         int lastShot = SDL_GetTicks();
         int lastDeath = SDL_GetTicks();
         int lastAttack = SDL_GetTicks();
+        bool gameOver = false;
 };

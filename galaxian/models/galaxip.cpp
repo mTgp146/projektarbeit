@@ -94,3 +94,7 @@ void Galaxip::setDyingAnimationLast() {
 void Galaxip::setDyingAnimationCounter(int dyingAnimationCounter) {
   this->dyingAnimationCounter = dyingAnimationCounter;
 }
+
+void Galaxip::setLives(int lives) {
+  this->lives = lives;
+}

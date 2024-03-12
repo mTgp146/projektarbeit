@@ -12,15 +12,16 @@ ProjectileAlien::ProjectileAlien() {
 void ProjectileAlien::moveProjectile() {
     int dT = SDL_GetTicks() - lastUpdate;
     if(alive) {
-        realY = realY + dT*0.00058 * (heightOfGalaxip - initialY);
+        // differ speed of the different types of projectiles
+        realY = realY + dT*0.00058 * (heightOfGalaxip - initialY) * (1 + (type/3.0f));
         rect.y = (int)realY;
-        realX = realX + dT*0.000535 * (galaxyPosX - initialX);
+        realX = realX + dT*0.000535 * (galaxyPosX - initialX) * (1 + (type/3.0f));
         rect.x = (int)realX;
     }
     lastUpdate = SDL_GetTicks();
 }
 
-void ProjectileAlien::shoot(int x, int y, int galaxipPosX) {
+void ProjectileAlien::shoot(int x, int y, int galaxipPosX, Types type) {
     rect.x = x;
     rect.y = y;
     realY = y;
@@ -30,4 +31,5 @@ void ProjectileAlien::shoot(int x, int y, int galaxipPosX) {
     alive = true;
     galaxyPosX = (float)galaxipPosX;
     lastUpdate = SDL_GetTicks();
+    this->type = type;
 }

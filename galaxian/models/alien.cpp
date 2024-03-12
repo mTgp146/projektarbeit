@@ -147,6 +147,8 @@ void Alien::setPositionInFormation(int position) {
   realY = rect.y;
   attackX = rect.x;
   attackY = rect.y;
+  attackStartX = (float)rect.x;
+  attackStartY = (float)rect.y;
   initialY = (float)rect.y;
 }
 
