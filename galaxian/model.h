@@ -1,5 +1,4 @@
 #include "models/galaxip.h"
-#include "models/projectile.h"
 #include "models/green_alien.h"
 #include "models/blue_alien.h"
 #include "models/red_alien.h"
@@ -7,6 +6,8 @@
 #include "models/background.h"
 #include "models/sounds.h"
 #include "models/points.h"
+#include "models/projectileGalaxip.h"
+#include "models/projectileAlien.h"
 #include <array>
 
 /**
@@ -14,6 +15,7 @@
 */
 class Model {
     public:
+        enum AlienTypes { G, B, R, F};
         /**
          * Initializes the aliens.
          * It sets their positions in the formation.
@@ -25,7 +27,8 @@ class Model {
          * Sets the lastUpdate variable of the Galaxip object to the current time.
         */
         void setGalaxipDT();
-        Projectile getGalaxipProjectile();
+        ProjectileGalaxip getGalaxipProjectile();
+        ProjectileAlien getAlienProjectile(int index);
         GreenAlien getGreenAlien(int index);
         BlueAlien getBlueAlien(int index);
         RedAlien getRedAlien(int index);
@@ -97,6 +100,20 @@ class Model {
          * Resets the points of the player to 0.
         */
         void resetPoints();
+        /**
+         * Moves the projectiles of the aliens in the game.
+        */
+        void moveAlienShots();
+        bool isAttackingAlienMovingToMiddle();
+        int getAttackingAlienX();
+        int getAttackingAlienY();
+        void moveAttackingAlien();
+        void tryToReviveGalaxip();
+        void checkExplosions();
+        void checkForNewAttack();
+        int getNewAttacker();
+        int getNewAttackingAlien(int i);
+
     private:
         int lastAlienDisplayChange = SDL_GetTicks();
         int alienFormationState = 0;
@@ -105,8 +122,15 @@ class Model {
         std::array<BlueAlien, 60> blueAliens = {};
         std::array<RedAlien, 60> redAliens = {};
         std::array<Flagship, 60> flagships = {};
-        Projectile projectileGalaxip{Projectile::TYPE::GALAXIP, galaxip.getRect().x+15, galaxip.getRect().y-8};
+        ProjectileGalaxip projectileGalaxip{galaxip.getRect().x+15, galaxip.getRect().y-8};
+        std::array<ProjectileAlien, 2> projectilesAlien = {};
         Background background;
         Sounds sounds;
         Points points;
+        bool alienInAttack = false;
+        int attackingAlien = -1;
+        AlienTypes attackingAlienType = G;
+        int lastShot = SDL_GetTicks();
+        int lastDeath = SDL_GetTicks();
+        int lastAttack = SDL_GetTicks();
 };

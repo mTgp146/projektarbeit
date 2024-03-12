@@ -67,6 +67,10 @@ void Model::initAliens() {
         }
         flagships[i].setPositionInFormation(i);
     }
+
+    greenAliens[59].setAttackMode(true);
+    alienInAttack = true;
+    attackingAlien = 59;
 }
 
 Galaxip Model::getGalaxip() {
@@ -77,8 +81,12 @@ void Model::setGalaxipDT() {
     galaxip.setLastUpdate();
 }
 
-Projectile Model::getGalaxipProjectile() {
+ProjectileGalaxip Model::getGalaxipProjectile() {
     return projectileGalaxip;
+}
+
+ProjectileAlien Model::getAlienProjectile(int index) {
+    return projectilesAlien[index];
 }
 
 GreenAlien Model::getGreenAlien(int index) {
@@ -102,7 +110,7 @@ void Model::moveGalaxip(enum Galaxip::Direction direction) {
 }
 
 void Model::shotByGalaxip() {
-    if(!projectileGalaxip.isAlive()) {
+    if(!projectileGalaxip.isAlive() && galaxip.isAlive()) {
         projectileGalaxip.setAlive(true);
         sounds.playShot();
     }
@@ -121,6 +129,10 @@ void Model::gameActions() {
     collisionCheck();
     alienDisplayChanger();
     updateBackground();
+    moveAlienShots();
+    tryToReviveGalaxip();
+    checkExplosions();
+    checkForNewAttack();
 }
 
 void Model::moveGalaxipProjectile() {
@@ -195,22 +207,21 @@ void Model::moveAliens() {
         }*/
 
         for(int i = 0; i < 60; i++) {
-            //if(greenAliens[i].isInAttackMode()) {
-             //   greenAliens[i].moveAlien();
-            //} else {
-                greenAliens[i].moveAlienAlongXAxis();
-            //}
+            greenAliens[i].moveAlien(galaxip.getX());
         }
         for(int i = 0; i < 60; i++) {
-            blueAliens[i].moveAlienAlongXAxis();
+            blueAliens[i].moveAlien(galaxip.getX());
         }
         for(int i = 0; i < 60; i++) {
-            redAliens[i].moveAlienAlongXAxis();
+            redAliens[i].moveAlien(galaxip.getX());
         }
         for(int i = 0; i < 60; i++) {
-            flagships[i].moveAlienAlongXAxis();
+            flagships[i].moveAlien(galaxip.getX());
         }
     } else {
+        if(alienInAttack) {
+            moveAttackingAlien();
+        }
         for(int i = 0; i < 60; i++) {
             greenAliens[i].setLastUpdate();
         }
@@ -224,43 +235,165 @@ void Model::moveAliens() {
             flagships[i].setLastUpdate();
         }
     }
+    // check if alien is out of screen
+    if(alienInAttack) {
+        if(attackingAlienType == G) {
+            if(greenAliens[attackingAlien].getRect().y > 512) {
+                alienInAttack = false;
+                greenAliens[attackingAlien].setAttackMode(false);
+                greenAliens[attackingAlien].setReturnMode(true);
+                lastAttack = SDL_GetTicks();
+            }
+        } else if(attackingAlienType == B) {
+            if(blueAliens[attackingAlien].getRect().y > 512) {
+                alienInAttack = false;
+                blueAliens[attackingAlien].setAttackMode(false);
+                blueAliens[attackingAlien].setReturnMode(true);
+                lastAttack = SDL_GetTicks();
+            }
+        } else if(attackingAlienType == R) {
+            if(redAliens[attackingAlien].getRect().y > 512) {
+                alienInAttack = false;
+                redAliens[attackingAlien].setAttackMode(false);
+                redAliens[attackingAlien].setReturnMode(true);
+                lastAttack = SDL_GetTicks();
+            }
+        } else if(attackingAlienType == F) {
+            if(flagships[attackingAlien].getRect().y > 512) {
+                alienInAttack = false;
+                flagships[attackingAlien].setAttackMode(false);
+                flagships[attackingAlien].setReturnMode(true);
+                lastAttack = SDL_GetTicks();
+            }
+        }
+    }
 }
 
 void Model::collisionCheck() {
     // check if Galaxip Projectile intersects with Green Aliens
     for(int i = 0; i < 60; i++) {
-        if(greenAliens[i].isInGame() && greenAliens[i].isAlive() && intersects(projectileGalaxip.getRect(), greenAliens[i].getRect())) {
+        if(greenAliens[i].isInGame() && greenAliens[i].isAlive() && projectileGalaxip.isAlive() && intersects(projectileGalaxip.getRect(), greenAliens[i].getRect())) {
             sounds.playExplosion();
             greenAliens[i].setAlive(false);
             resetGalaxipProjectile();
-            points.addPoints(Points::Values::GREEN_FORMATION);
+            if(greenAliens[i].isInAttackMode()) {
+                alienInAttack = false;
+                points.addPoints(Points::Values::GREEN_ATTACK);
+            } else {
+                points.addPoints(Points::Values::GREEN_FORMATION);
+            }
+            greenAliens[i].increaseDyingAnimationCounter();
         }
     }
     // check if Galaxip Projectile intersects with Blue Aliens
     for(int i = 0; i < 60; i++) {
-        if(blueAliens[i].isInGame() && blueAliens[i].isAlive() && intersects(projectileGalaxip.getRect(), blueAliens[i].getRect())) {
+        if(blueAliens[i].isInGame() && blueAliens[i].isAlive() && projectileGalaxip.isAlive() && intersects(projectileGalaxip.getRect(), blueAliens[i].getRect())) {
             sounds.playExplosion();
             blueAliens[i].setAlive(false);
             resetGalaxipProjectile();
-            points.addPoints(Points::Values::BLUE_FORMATION);
+            if(blueAliens[i].isInAttackMode()) {
+                alienInAttack = false;
+                points.addPoints(Points::Values::BLUE_ATTACK);
+            } else {
+                points.addPoints(Points::Values::BLUE_FORMATION);
+            }
+            blueAliens[i].increaseDyingAnimationCounter();
         }
     }
     // check if Galaxip Projectile intersects with Red Aliens
     for(int i = 0; i < 60; i++) {
-        if(redAliens[i].isInGame() && redAliens[i].isAlive() && intersects(projectileGalaxip.getRect(), redAliens[i].getRect())) {
+        if(redAliens[i].isInGame() && redAliens[i].isAlive() && projectileGalaxip.isAlive() && intersects(projectileGalaxip.getRect(), redAliens[i].getRect())) {
             sounds.playExplosion();
             redAliens[i].setAlive(false);
             resetGalaxipProjectile();
-            points.addPoints(Points::Values::RED_FORMATION);
+            if(redAliens[i].isInAttackMode()) {
+                alienInAttack = false;
+                points.addPoints(Points::Values::RED_ATTACK);
+            } else {
+                points.addPoints(Points::Values::RED_FORMATION);
+            }
+            redAliens[i].increaseDyingAnimationCounter();
         }
     }
     // check if Galaxip Projectile intersects with Flagships
     for(int i = 0; i < 60; i++) {
-        if(flagships[i].isInGame() && flagships[i].isAlive() && intersects(projectileGalaxip.getRect(), flagships[i].getRect())) {
+        if(flagships[i].isInGame() && flagships[i].isAlive() && projectileGalaxip.isAlive() && intersects(projectileGalaxip.getRect(), flagships[i].getRect())) {
             sounds.playExplosion();
             flagships[i].setAlive(false);
             resetGalaxipProjectile();
-            points.addPoints(Points::Values::FLAGSHIP_FORMATION);
+            if(flagships[i].isInAttackMode()) {
+                alienInAttack = false;
+                points.addPoints(Points::Values::FLAGSHIP_ATTACK_SOLO);
+            } else {
+                points.addPoints(Points::Values::FLAGSHIP_FORMATION);
+            }
+            flagships[i].increaseDyingAnimationCounter();
+        }
+    }
+    // check if Alien Projectile intersects with Galaxip
+    for(int i = 0; i < 2; i++) {
+        if(galaxip.isAlive() && projectilesAlien[i].isAlive() && intersects(projectilesAlien[i].getRect(), galaxip.getRect())) {
+            sounds.playExplosion();
+            galaxip.loseLife();
+            projectilesAlien[i].setAlive(false);
+            lastDeath = SDL_GetTicks();
+            galaxip.increaseDyingAnimationCounter();
+        }
+    }
+    // check if attacking Alien intersects with Galaxip
+    if(alienInAttack) {
+        if(attackingAlienType == G) {
+            if(galaxip.isAlive() && intersects(galaxip.getRect(), greenAliens[attackingAlien].getRect())) {
+                sounds.playExplosion();
+                galaxip.loseLife();
+                alienInAttack = false;
+                lastDeath = SDL_GetTicks();
+                greenAliens[attackingAlien].setAttackMode(false);
+                greenAliens[attackingAlien].setAlive(false);
+                greenAliens[attackingAlien].increaseDyingAnimationCounter();
+                points.addPoints(Points::Values::GREEN_ATTACK);
+                galaxip.increaseDyingAnimationCounter();
+                lastAttack = SDL_GetTicks();
+            }
+        } else if(attackingAlienType == B) {
+            if(galaxip.isAlive() && intersects(galaxip.getRect(), blueAliens[attackingAlien].getRect())) {
+                sounds.playExplosion();
+                galaxip.loseLife();
+                alienInAttack = false;
+                lastDeath = SDL_GetTicks();
+                blueAliens[attackingAlien].setAttackMode(false);
+                blueAliens[attackingAlien].setAlive(false);
+                blueAliens[attackingAlien].increaseDyingAnimationCounter();
+                points.addPoints(Points::Values::BLUE_ATTACK);
+                galaxip.increaseDyingAnimationCounter();
+                lastAttack = SDL_GetTicks();
+            }
+        } else if(attackingAlienType == R) {
+            if(galaxip.isAlive() && intersects(galaxip.getRect(), redAliens[attackingAlien].getRect())) {
+                sounds.playExplosion();
+                galaxip.loseLife();
+                alienInAttack = false;
+                lastDeath = SDL_GetTicks();
+                redAliens[attackingAlien].setAttackMode(false);
+                redAliens[attackingAlien].setAlive(false);
+                redAliens[attackingAlien].increaseDyingAnimationCounter();
+                points.addPoints(Points::Values::RED_ATTACK);
+                galaxip.increaseDyingAnimationCounter();
+                lastAttack = SDL_GetTicks();
+            }
+        } else if(attackingAlienType == F) {
+            if(galaxip.isAlive() && intersects(galaxip.getRect(), flagships[attackingAlien].getRect())) {
+                sounds.playExplosion();
+                galaxip.loseLife();
+                alienInAttack = false;
+                lastDeath = SDL_GetTicks();
+                flagships[attackingAlien].setAttackMode(false);
+                flagships[attackingAlien].setAlive(false);
+                flagships[attackingAlien].increaseDyingAnimationCounter();
+                points.addPoints(Points::Values::FLAGSHIP_ATTACK_SOLO);
+                galaxip.increaseDyingAnimationCounter();
+                lastAttack = SDL_GetTicks();
+            }
         }
     }
 }
@@ -332,9 +465,6 @@ bool Model::intersects(SDL_Rect rect1, SDL_Rect rect2) {
 
 bool Model::changeAlienDisplay() {
   if((SDL_GetTicks() - lastAlienDisplayChange) > 400) {
-///
-   // attack = true;
-///
     if(alienFormationState < 3) {
       alienFormationState = alienFormationState + 1;
     } else {
@@ -368,4 +498,249 @@ int Model::getPoints() {
 
 void Model::resetPoints() {
     points.resetPoints();
+}
+
+void Model::moveAlienShots() {
+    for(int i = 0; i < 2; i++) {
+        if(projectilesAlien[i].isAlive()) {
+            projectilesAlien[i].moveProjectile();
+        } else if(alienInAttack) {
+            if(isAttackingAlienMovingToMiddle() && SDL_GetTicks() - lastShot > 300) {
+                projectilesAlien[i].shoot(getAttackingAlienX()+10, getAttackingAlienY()+11, galaxip.getX());
+                lastShot = SDL_GetTicks();
+            }
+        }
+        if(projectilesAlien[i].getRect().y > 512) {
+            projectilesAlien[i].setAlive(false);
+        }
+    }
+}
+
+void Model::tryToReviveGalaxip() {
+    if(!galaxip.isAlive()) {
+        if(SDL_GetTicks() - lastDeath > 3000) {
+            galaxip.setAlive(true);
+            galaxip.setX(240);
+        }
+    }
+}
+
+bool Model::isAttackingAlienMovingToMiddle() {
+    if(attackingAlienType == G) {
+        if(greenAliens[attackingAlien].isIsMovingToMiddle()) {
+            return true;
+        }
+    } else if(attackingAlienType == B) {
+        if(blueAliens[attackingAlien].isIsMovingToMiddle()) {
+            return true;
+        }
+    } else if(attackingAlienType == R) {
+        if(redAliens[attackingAlien].isIsMovingToMiddle()) {
+            return true;
+        }
+    } else if(attackingAlienType == F) {
+        if(flagships[attackingAlien].isIsMovingToMiddle()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+int Model::getAttackingAlienX() {
+    if(attackingAlienType == G) {
+        return greenAliens[attackingAlien].getRect().x;
+    } else if(attackingAlienType == B) {
+        return blueAliens[attackingAlien].getRect().x;
+    } else if(attackingAlienType == R) {
+        return redAliens[attackingAlien].getRect().x;
+    } else if(attackingAlienType == F) {
+        return flagships[attackingAlien].getRect().x;
+    }
+    return -1;
+}
+
+int Model::getAttackingAlienY() {
+    if(attackingAlienType == G) {
+        return greenAliens[attackingAlien].getRect().y;
+    } else if(attackingAlienType == B) {
+        return blueAliens[attackingAlien].getRect().y;
+    } else if(attackingAlienType == R) {
+        return redAliens[attackingAlien].getRect().y;
+    } else if(attackingAlienType == F) {
+        return flagships[attackingAlien].getRect().y;
+    }
+    return -1;
+}
+
+void Model::moveAttackingAlien() {
+    if(attackingAlienType == G) {
+        greenAliens[attackingAlien].moveAttackingAlien(galaxip.getX(), true);
+    } else if(attackingAlienType == B) {
+        blueAliens[attackingAlien].moveAttackingAlien(galaxip.getX(), true);
+    } else if(attackingAlienType == R) {
+        redAliens[attackingAlien].moveAttackingAlien(galaxip.getX(), true);
+    } else if(attackingAlienType == F) {
+        flagships[attackingAlien].moveAttackingAlien(galaxip.getX(), true);
+    }
+}
+
+void Model::checkExplosions() {
+    for(int i = 0; i < 60; i++) {
+        if(greenAliens[i].getDyingAnimationCounter() > 0) {
+            if(greenAliens[i].getDyingAnimationCounter() == 1) {
+                greenAliens[i].setDyingAnimationLast();
+                greenAliens[i].increaseDyingAnimationCounter();
+            } else if(greenAliens[i].getDyingAnimationCounter() == 2 && greenAliens[i].getDyingAnimationLast() > 50) {
+                greenAliens[i].setDyingAnimationLast();
+                greenAliens[i].increaseDyingAnimationCounter();
+            } else if(greenAliens[i].getDyingAnimationCounter() == 3 && greenAliens[i].getDyingAnimationLast() > 50) {
+                greenAliens[i].setDyingAnimationCounter(0);
+            }
+        }
+        if(blueAliens[i].getDyingAnimationCounter() > 0) {
+            if(blueAliens[i].getDyingAnimationCounter() == 1) {
+                blueAliens[i].setDyingAnimationLast();
+                blueAliens[i].increaseDyingAnimationCounter();
+            } else if(blueAliens[i].getDyingAnimationCounter() == 2 && blueAliens[i].getDyingAnimationLast() > 50) {
+                blueAliens[i].setDyingAnimationLast();
+                blueAliens[i].increaseDyingAnimationCounter();
+            } else if(blueAliens[i].getDyingAnimationCounter() == 3 && blueAliens[i].getDyingAnimationLast() > 50) {
+                blueAliens[i].setDyingAnimationCounter(0);
+            }
+        }
+        if(redAliens[i].getDyingAnimationCounter() > 0) {
+            if(redAliens[i].getDyingAnimationCounter() == 1) {
+                redAliens[i].setDyingAnimationLast();
+                redAliens[i].increaseDyingAnimationCounter();
+            } else if(redAliens[i].getDyingAnimationCounter() == 2 && redAliens[i].getDyingAnimationLast() > 50) {
+                redAliens[i].setDyingAnimationLast();
+                redAliens[i].increaseDyingAnimationCounter();
+            } else if(redAliens[i].getDyingAnimationCounter() == 3 && redAliens[i].getDyingAnimationLast() > 50) {
+                redAliens[i].setDyingAnimationCounter(0);
+            }
+        }
+        if(flagships[i].getDyingAnimationCounter() > 0) {
+            if(flagships[i].getDyingAnimationCounter() == 1) {
+                flagships[i].setDyingAnimationLast();
+                flagships[i].increaseDyingAnimationCounter();
+            } else if(flagships[i].getDyingAnimationCounter() == 2 && flagships[i].getDyingAnimationLast() > 50) {
+                flagships[i].setDyingAnimationLast();
+                flagships[i].increaseDyingAnimationCounter();
+            } else if(flagships[i].getDyingAnimationCounter() == 3 && flagships[i].getDyingAnimationLast() > 50) {
+                flagships[i].setDyingAnimationCounter(0);
+            }
+        }
+    }
+    if(galaxip.getDyingAnimationCounter() > 0) {
+        if(galaxip.getDyingAnimationCounter() == 1) {
+            galaxip.setDyingAnimationLast();
+            galaxip.increaseDyingAnimationCounter();
+        } else if(galaxip.getDyingAnimationCounter() == 2 && galaxip.getDyingAnimationLast() > 100) {
+            galaxip.setDyingAnimationLast();
+            galaxip.increaseDyingAnimationCounter();
+        } else if(galaxip.getDyingAnimationCounter() == 3 && galaxip.getDyingAnimationLast() > 100) {
+            galaxip.setDyingAnimationCounter(0);
+        }
+    }
+}
+
+void Model::checkForNewAttack() {
+    if(!alienInAttack && SDL_GetTicks() - lastAttack > 3000) {
+        lastAttack = SDL_GetTicks();
+        getNewAttacker();
+    }
+}
+
+int Model::getNewAttacker() {
+    int newAttacker = -1;
+    for(int i = 59; i >= 0; i = i - 10) {
+        newAttacker = getNewAttackingAlien(i);
+        if(newAttacker != -1) {
+            return newAttacker;
+        }
+    }
+    for(int i = 50; i >= 0; i = i - 10) {
+        newAttacker = getNewAttackingAlien(i);
+        if(newAttacker != -1) {
+            return newAttacker;
+        }
+    }
+    for(int i = 58; i >= 0; i = i - 10) {
+        newAttacker = getNewAttackingAlien(i);
+        if(newAttacker != -1) {
+            return newAttacker;
+        }
+    }
+    for(int i = 51; i >= 0; i = i - 10) {
+        newAttacker = getNewAttackingAlien(i);
+        if(newAttacker != -1) {
+            return newAttacker;
+        }
+    }
+    for(int i = 57; i >= 0; i = i - 10) {
+        newAttacker = getNewAttackingAlien(i);
+        if(newAttacker != -1) {
+            return newAttacker;
+        }
+    }
+    for(int i = 52; i >= 0; i = i - 10) {
+        newAttacker = getNewAttackingAlien(i);
+        if(newAttacker != -1) {
+            return newAttacker;
+        }
+    }
+    for(int i = 56; i >= 0; i = i - 10) {
+        newAttacker = getNewAttackingAlien(i);
+        if(newAttacker != -1) {
+            return newAttacker;
+        }
+    }
+    for(int i = 53; i >= 0; i = i - 10) {
+        newAttacker = getNewAttackingAlien(i);
+        if(newAttacker != -1) {
+            return newAttacker;
+        }
+    }
+    for(int i = 55; i >= 0; i = i - 10) {
+        newAttacker = getNewAttackingAlien(i);
+        if(newAttacker != -1) {
+            return newAttacker;
+        }
+    }
+    for(int i = 54; i >= 0; i = i - 10) {
+        newAttacker = getNewAttackingAlien(i);
+        if(newAttacker != -1) {
+            return newAttacker;
+        }
+    }
+    return newAttacker;
+}
+
+int Model::getNewAttackingAlien(int i) {
+    if(greenAliens[i].isInGame() && greenAliens[i].isAlive()) {
+        greenAliens[i].setAttackMode(true);
+        alienInAttack = true;
+        attackingAlien = i;
+        attackingAlienType = G;
+        return i;
+    } else if (blueAliens[i].isInGame() && blueAliens[i].isAlive()) {
+        blueAliens[i].setAttackMode(true);
+        alienInAttack = true;
+        attackingAlien = i;
+        attackingAlienType = B;
+        return i;
+    } else if (redAliens[i].isInGame() && redAliens[i].isAlive()) {
+        redAliens[i].setAttackMode(true);
+        alienInAttack = true;
+        attackingAlien = i;
+        attackingAlienType = R;
+        return i;
+    } else if (flagships[i].isInGame() && flagships[i].isAlive()) {
+        flagships[i].setAttackMode(true);
+        alienInAttack = true;
+        attackingAlien = i;
+        attackingAlienType = F;
+        return i;
+    }
+    return -1;
 }

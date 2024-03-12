@@ -1,3 +1,6 @@
+#ifndef PROJECTILE_H
+#define PROJECTILE_H
+
 #include "SDL2/SDL.h"
 
 /**
@@ -5,25 +8,9 @@
 */
 class Projectile  {
     public:
-        /**
-         * The type of the projectile.
-        */
-        enum TYPE { GALAXIP, ALIEN };
-        /**
-         * The constructor of the Projectile class.
-         * @param type The type of the projectile.
-         * @param x The x coordinate of the projectile.
-         * @param y The y coordinate of the projectile.
-        */
-        Projectile(TYPE type, int x, int y);
         SDL_Rect getRect() const;
         void setX(int x);
         void setY(int y);
-        /**
-         * Moves the projectile in the game by a defined amount.
-        */
-        void moveProjectile();
-        TYPE getType() const;
         bool isAlive() const;
         void setAlive(bool alive);
         /**
@@ -31,11 +18,12 @@ class Projectile  {
         */
         void setLastUpdate();
 
-    private:
+    protected:
         int lastUpdate;
         SDL_Rect rect = SDL_Rect();
-        TYPE type;
         bool alive = false;
         float realY = 0.0f;
 
 };
+
+#endif // PROJECTILE_H	

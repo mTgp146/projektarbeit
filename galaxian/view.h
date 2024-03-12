@@ -27,12 +27,15 @@ class View {
     void render();
     void renderGalaxip();
     void renderGalaxipProjectile();
+    void renderAlienProjectiles();
     void renderGreenAliens();
     void renderBlueAliens();
     void renderRedAliens();
     void renderFlagships();
     void renderBackground();
     void renderScore();
+    void renderLives();
+    void renderExplosions();
     /**
      * Exits the game.
      * It frees the memory used by the textures and the renderer.
@@ -86,6 +89,12 @@ class View {
     SDL_Surface* num_8_sur;
     SDL_Texture* num_9_tex;
     SDL_Surface* num_9_sur;
+    SDL_Texture* explosion1_tex;
+    SDL_Surface* explosion1_sur;
+    SDL_Texture* explosion2_tex;
+    SDL_Surface* explosion2_sur;
+    SDL_Texture* explosion3_tex;
+    SDL_Surface* explosion3_sur;
     SDL_Renderer* renderer;
     SDL_Window *window;
     Model &model;

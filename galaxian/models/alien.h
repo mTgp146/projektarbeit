@@ -16,15 +16,15 @@ class Alien {
         SDL_Rect getRect() const;
         void setX(int x);
         void setY(int y);
-        void moveAlien();
+        void moveAlien(int galaxipPos);
         /**
          * Moves the alien in the game when it is attacking.
         */
-        void moveAttackingAlien();
+        void moveAttackingAlien(int galaxipPos, bool callFromModel);
         /**
          * Moves the alien in the game when it is not attacking.
         */
-        void moveAlienAlongXAxis();
+        void moveAlienAlongXAxis(int dt);
         bool isAlive() const;
         void setAlive(bool alive);
         void changeDirection();
@@ -32,6 +32,7 @@ class Alien {
          * Sets the last update time to the current time.
         */
         void setLastUpdate();
+        void setLastAttackUpdate();
         Direction getDirection() const;
         int getTextureNumber();
         void setTextureNumber(int texNum);
@@ -44,16 +45,43 @@ class Alien {
          * @param position The index of the alien in the formation.
         */
         void setPositionInFormation(int position);
+        void moveInCircle(int dt);
+        void moveToMiddle(int dt);
+        void moveAlienToGalaxip(int dt);
+        bool isIsMovingToMiddle() const;
+        int getDyingAnimationCounter() const;
+        void increaseDyingAnimationCounter();
+        void setDyingAnimationCounter(int dyingAnimationCounter);
+        int getDyingAnimationLast() const;
+        void setDyingAnimationLast();
+        void setReturnMode(bool returnMode);
+        bool isReturnMode() const;
+
     protected:
+        float middleOfScreen = 245.0f;
+        float heightOfGalaxip = 448.0f;
         float realX = 0.0f;
         float realY = 0.0f;
+        float attackX = 0.0f;
+        float attackY = 0.0f;
+        float attackStartX = 0.0f;
+        float attackStartY = 0.0f;
         int lastUpdate;
+        int lastAttackUpdate;
         int textureNumber = 1;
         SDL_Rect rect = SDL_Rect();
         bool alive = true;
         bool inGame = false;
         Direction direction = LEFT;
         bool attackMode = false;
+        bool returnMode = false;
+        float moveToGalaxipStartX = 0.0f;
+        int galaxipPositionAtStartOfAttack = 0;
+        bool isMovingToGalaxip = false;
+        bool isMovingToMiddle = false;
+        int dyingAnimationCounter = 0;
+        int dyingAnimationLast = SDL_GetTicks();
+        float initialY = 0.0f;
 };
 
 #endif // ALIEN_H

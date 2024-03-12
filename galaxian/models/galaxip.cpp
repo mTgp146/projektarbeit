@@ -53,3 +53,44 @@ void Galaxip::moveGalaxip(Direction direction) {
   }
   rect.x = (int)realX;
 }
+
+int Galaxip::getLives() const {
+  return lives;
+}
+
+bool Galaxip::loseLife() {
+  lives--;
+  alive = false;
+  if (lives == 0) {
+    return true;
+  }
+  return false;
+}
+
+bool Galaxip::isAlive() const {
+  return alive;
+}
+
+void Galaxip::setAlive(bool alive) {
+  this->alive = alive;
+}
+
+int Galaxip::getDyingAnimationCounter() const {
+  return dyingAnimationCounter;
+}
+
+void Galaxip::increaseDyingAnimationCounter() {
+  this->dyingAnimationCounter = dyingAnimationCounter + 1;
+}
+
+int Galaxip::getDyingAnimationLast() const {
+  return dyingAnimationLast;
+}
+
+void Galaxip::setDyingAnimationLast() {
+  dyingAnimationLast = SDL_GetTicks();
+}
+
+void Galaxip::setDyingAnimationCounter(int dyingAnimationCounter) {
+  this->dyingAnimationCounter = dyingAnimationCounter;
+}

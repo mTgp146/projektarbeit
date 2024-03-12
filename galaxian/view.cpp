@@ -9,42 +9,70 @@ void View::render() {
     renderBackground();
 	renderGalaxip();
     renderGalaxipProjectile();
+    renderAlienProjectiles();
     renderGreenAliens();
     renderBlueAliens();
     renderRedAliens();
     renderFlagships();
     renderScore();
+    renderLives();
+    renderExplosions();
 
 	SDL_RenderPresent(renderer);
 }
 
 void View::renderGalaxip() {
     SDL_Rect galaxip_rect = model.getGalaxip().getRect();
-    SDL_RenderCopy(renderer, galaxip_tex, NULL, &galaxip_rect);
-
-    /*  rotate by 45 degrees
-    SDL_Point center = SDL_Point();
-    center.x = 16;
-    center.y = 16;
-    SDL_RenderCopyEx(renderer, galaxip_tex, NULL, &galaxip_rect, 45.0, &center, SDL_FLIP_NONE);
-    */
+    if(model.getGalaxip().getLives() > 0 && model.getGalaxip().isAlive()) {
+        SDL_RenderCopy(renderer, galaxip_tex, NULL, &galaxip_rect);
+    }
 }
 
 void View::renderGalaxipProjectile() {
-    SDL_Rect projectile_galaxip_rect = model.getGalaxipProjectile().getRect();
-    SDL_RenderCopy(renderer, projectile_galaxip_tex, NULL, &projectile_galaxip_rect);
+    if(model.getGalaxip().isAlive() || model.getGalaxipProjectile().isAlive()) {
+        SDL_Rect projectile_galaxip_rect = model.getGalaxipProjectile().getRect();
+        SDL_SetRenderDrawColor(renderer, 255, 165, 0, 255);
+        SDL_RenderFillRect(renderer, &projectile_galaxip_rect);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    }
+}
+
+void View::renderAlienProjectiles() {
+    for(int i = 0; i < 2; i++) {
+        if(model.getAlienProjectile(i).isAlive()) {
+            SDL_Rect alien_projectile_rect = model.getAlienProjectile(i).getRect();
+            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+            SDL_RenderFillRect(renderer, &alien_projectile_rect);
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        }
+    
+    }
 }
 
 void View::renderGreenAliens() {
     for (int i = 0; i < 60; i++) {
         if(model.getGreenAlien(i).isAlive() && model.getGreenAlien(i).isInGame())	{
-            SDL_Rect green_alien_rect = model.getGreenAlien(i).getRect();
-            if(model.getGreenAlien(i).getTextureNumber() == 1) {
-                SDL_RenderCopy(renderer, green_alien1_tex, NULL, &green_alien_rect);
-            } else if(model.getGreenAlien(i).getTextureNumber() == 2) {
-                SDL_RenderCopy(renderer, green_alien2_tex, NULL, &green_alien_rect);
+            if(model.getGreenAlien(i).isInAttackMode() && model.getGreenAlien(i).isIsMovingToMiddle()) {
+                SDL_Rect green_alien_rect = model.getGreenAlien(i).getRect();
+                SDL_Point center = SDL_Point();
+                center.x = 11;
+                center.y = 5;
+                if(model.getGreenAlien(i).getTextureNumber() == 1) {
+                    SDL_RenderCopyEx(renderer, green_alien1_tex, NULL, &green_alien_rect, 45.0, &center, SDL_FLIP_NONE);
+                } else if(model.getGreenAlien(i).getTextureNumber() == 2) {
+                    SDL_RenderCopyEx(renderer, green_alien2_tex, NULL, &green_alien_rect, 45.0, &center, SDL_FLIP_NONE);
+                } else {
+                    SDL_RenderCopyEx(renderer, green_alien3_tex, NULL, &green_alien_rect, 45.0, &center, SDL_FLIP_NONE);
+                }
             } else {
-                SDL_RenderCopy(renderer, green_alien3_tex, NULL, &green_alien_rect);
+                SDL_Rect green_alien_rect = model.getGreenAlien(i).getRect();
+                if(model.getGreenAlien(i).getTextureNumber() == 1) {
+                    SDL_RenderCopy(renderer, green_alien1_tex, NULL, &green_alien_rect);
+                } else if(model.getGreenAlien(i).getTextureNumber() == 2) {
+                    SDL_RenderCopy(renderer, green_alien2_tex, NULL, &green_alien_rect);
+                } else {
+                    SDL_RenderCopy(renderer, green_alien3_tex, NULL, &green_alien_rect);
+                }
             }
         }
     }
@@ -53,13 +81,27 @@ void View::renderGreenAliens() {
 void View::renderBlueAliens() {
     for (int i = 0; i < 60; i++) {
         if(model.getBlueAlien(i).isAlive() && model.getBlueAlien(i).isInGame()) {
-            SDL_Rect blue_alien_rect = model.getBlueAlien(i).getRect();
-            if(model.getBlueAlien(i).getTextureNumber() == 1) {
-                SDL_RenderCopy(renderer, blue_alien1_tex, NULL, &blue_alien_rect);
-            } else if(model.getBlueAlien(i).getTextureNumber() == 2) {
-                SDL_RenderCopy(renderer, blue_alien2_tex, NULL, &blue_alien_rect);
+            if(model.getBlueAlien(i).isInAttackMode() && model.getBlueAlien(i).isIsMovingToMiddle()) {
+                SDL_Rect blue_alien_rect = model.getBlueAlien(i).getRect();
+                SDL_Point center = SDL_Point();
+                center.x = 11;
+                center.y = 5;
+                if(model.getBlueAlien(i).getTextureNumber() == 1) {
+                    SDL_RenderCopyEx(renderer, blue_alien1_tex, NULL, &blue_alien_rect, 45.0, &center, SDL_FLIP_NONE);
+                } else if(model.getBlueAlien(i).getTextureNumber() == 2) {
+                    SDL_RenderCopyEx(renderer, blue_alien2_tex, NULL, &blue_alien_rect, 45.0, &center, SDL_FLIP_NONE);
+                } else {
+                    SDL_RenderCopyEx(renderer, blue_alien3_tex, NULL, &blue_alien_rect, 45.0, &center, SDL_FLIP_NONE);
+                }
             } else {
-                SDL_RenderCopy(renderer, blue_alien3_tex, NULL, &blue_alien_rect);
+                SDL_Rect blue_alien_rect = model.getBlueAlien(i).getRect();
+                if(model.getBlueAlien(i).getTextureNumber() == 1) {
+                    SDL_RenderCopy(renderer, blue_alien1_tex, NULL, &blue_alien_rect);
+                } else if(model.getBlueAlien(i).getTextureNumber() == 2) {
+                    SDL_RenderCopy(renderer, blue_alien2_tex, NULL, &blue_alien_rect);
+                } else {
+                    SDL_RenderCopy(renderer, blue_alien3_tex, NULL, &blue_alien_rect);
+                }
             }
         }
     }
@@ -68,13 +110,27 @@ void View::renderBlueAliens() {
 void View::renderRedAliens() {
     for (int i = 0; i < 60; i++) {
         if(model.getRedAlien(i).isAlive() && model.getRedAlien(i).isInGame()) {
-            SDL_Rect red_alien_rect = model.getRedAlien(i).getRect();
-            if(model.getRedAlien(i).getTextureNumber() == 1) {
-                SDL_RenderCopy(renderer, red_alien1_tex, NULL, &red_alien_rect);
-            } else if(model.getRedAlien(i).getTextureNumber() == 2) {
-                SDL_RenderCopy(renderer, red_alien2_tex, NULL, &red_alien_rect);
+            if(model.getRedAlien(i).isInAttackMode() && model.getRedAlien(i).isIsMovingToMiddle()) {
+                SDL_Rect red_alien_rect = model.getRedAlien(i).getRect();
+                SDL_Point center = SDL_Point();
+                center.x = 11;
+                center.y = 5;
+                if(model.getRedAlien(i).getTextureNumber() == 1) {
+                    SDL_RenderCopyEx(renderer, red_alien1_tex, NULL, &red_alien_rect, 45.0, &center, SDL_FLIP_NONE);
+                } else if(model.getRedAlien(i).getTextureNumber() == 2) {
+                    SDL_RenderCopyEx(renderer, red_alien2_tex, NULL, &red_alien_rect, 45.0, &center, SDL_FLIP_NONE);
+                } else {
+                    SDL_RenderCopyEx(renderer, red_alien3_tex, NULL, &red_alien_rect, 45.0, &center, SDL_FLIP_NONE);
+                }
             } else {
-                SDL_RenderCopy(renderer, red_alien3_tex, NULL, &red_alien_rect);
+                SDL_Rect red_alien_rect = model.getRedAlien(i).getRect();
+                if(model.getRedAlien(i).getTextureNumber() == 1) {
+                    SDL_RenderCopy(renderer, red_alien1_tex, NULL, &red_alien_rect);
+                } else if(model.getRedAlien(i).getTextureNumber() == 2) {
+                    SDL_RenderCopy(renderer, red_alien2_tex, NULL, &red_alien_rect);
+                } else {
+                    SDL_RenderCopy(renderer, red_alien3_tex, NULL, &red_alien_rect);
+                }
             }
         }
     }
@@ -83,8 +139,16 @@ void View::renderRedAliens() {
 void View::renderFlagships() {
     for (int i = 0; i < 60; i++) {
         if(model.getFlagship(i).isAlive() && model.getFlagship(i).isInGame()) {
-            SDL_Rect flagship_rect = model.getFlagship(i).getRect();
-            SDL_RenderCopy(renderer, flagship_tex, NULL, &flagship_rect);
+            if(model.getFlagship(i).isInAttackMode() && model.getFlagship(i).isIsMovingToMiddle()) {
+                SDL_Rect flagship_rect = model.getFlagship(i).getRect();
+                SDL_Point center = SDL_Point();
+                center.x = 11;
+                center.y = 5;
+                SDL_RenderCopyEx(renderer, flagship_tex, NULL, &flagship_rect, 45.0, &center, SDL_FLIP_NONE);
+            } else {
+                SDL_Rect flagship_rect = model.getFlagship(i).getRect();
+                SDL_RenderCopy(renderer, flagship_tex, NULL, &flagship_rect);
+            }
         }
     }
 }
@@ -109,7 +173,7 @@ void View::renderScore() {
     do {
         digit = points % 10;
         points = points / 10;
-        SDL_Rect num_rect = {WIDTH - 12 - x, 16, 8, 10};
+        SDL_Rect num_rect = {104 - x, 8, 16, 20};
         if(digit == 0) {
             SDL_RenderCopy(renderer, num_0_tex, NULL, &num_rect);
         } else if(digit == 1) {
@@ -131,9 +195,93 @@ void View::renderScore() {
         } else {
             SDL_RenderCopy(renderer, num_9_tex, NULL, &num_rect);
         }
-        x += 16;
+        x += 20;
     } while (points > 0	);
-    
+}
+
+void View::renderLives() {
+    int lives = model.getGalaxip().getLives();
+    int x = 20;
+    for(int i = 0; i < lives; i++) {
+        SDL_Rect galaxip_rect = {WIDTH - x, 8, 16, 16};
+        SDL_RenderCopy(renderer, galaxip_tex, NULL, &galaxip_rect);
+        x += 20;
+    }
+}
+
+void View::renderExplosions() {
+    for(int i = 0; i < 60; i++) {
+        if(model.getGreenAlien(i).getDyingAnimationCounter() > 0) {
+            SDL_Rect explosion_rect = model.getGreenAlien(i).getRect();
+            explosion_rect.w = 32;
+            explosion_rect.h = 32;
+            explosion_rect.x -= 8;
+            explosion_rect.y -= 8;
+            if(model.getGreenAlien(i).getDyingAnimationCounter() == 1) {
+                SDL_RenderCopy(renderer, explosion1_tex, NULL, &explosion_rect);
+            } else if(model.getGreenAlien(i).getDyingAnimationCounter() == 2) {
+                SDL_RenderCopy(renderer, explosion2_tex, NULL, &explosion_rect);
+            } else if(model.getGreenAlien(i).getDyingAnimationCounter() == 3) {
+                SDL_RenderCopy(renderer, explosion3_tex, NULL, &explosion_rect);
+            }
+        }
+        if(model.getBlueAlien(i).getDyingAnimationCounter() > 0) {
+            SDL_Rect explosion_rect = model.getBlueAlien(i).getRect();
+            explosion_rect.w = 32;
+            explosion_rect.h = 32;
+            explosion_rect.x -= 8;
+            explosion_rect.y -= 8;
+            if(model.getBlueAlien(i).getDyingAnimationCounter() == 1) {
+                SDL_RenderCopy(renderer, explosion1_tex, NULL, &explosion_rect);
+            } else if(model.getBlueAlien(i).getDyingAnimationCounter() == 2) {
+                SDL_RenderCopy(renderer, explosion2_tex, NULL, &explosion_rect);
+            } else if(model.getBlueAlien(i).getDyingAnimationCounter() == 3) {
+                SDL_RenderCopy(renderer, explosion3_tex, NULL, &explosion_rect);
+            }
+        }
+        if(model.getRedAlien(i).getDyingAnimationCounter() > 0) {
+            SDL_Rect explosion_rect = model.getRedAlien(i).getRect();
+            explosion_rect.w = 32;
+            explosion_rect.h = 32;
+            explosion_rect.x -= 8;
+            explosion_rect.y -= 8;
+            if(model.getRedAlien(i).getDyingAnimationCounter() == 1) {
+                SDL_RenderCopy(renderer, explosion1_tex, NULL, &explosion_rect);
+            } else if(model.getRedAlien(i).getDyingAnimationCounter() == 2) {
+                SDL_RenderCopy(renderer, explosion2_tex, NULL, &explosion_rect);
+            } else if(model.getRedAlien(i).getDyingAnimationCounter() == 3) {
+                SDL_RenderCopy(renderer, explosion3_tex, NULL, &explosion_rect);
+            }
+        }
+        if(model.getFlagship(i).getDyingAnimationCounter() > 0) {
+            SDL_Rect explosion_rect = model.getFlagship(i).getRect();
+            explosion_rect.w = 32;
+            explosion_rect.h = 32;
+            explosion_rect.x -= 8;
+            explosion_rect.y -= 8;
+            if(model.getFlagship(i).getDyingAnimationCounter() == 1) {
+                SDL_RenderCopy(renderer, explosion1_tex, NULL, &explosion_rect);
+            } else if(model.getFlagship(i).getDyingAnimationCounter() == 2) {
+                SDL_RenderCopy(renderer, explosion2_tex, NULL, &explosion_rect);
+            } else if(model.getFlagship(i).getDyingAnimationCounter() == 3) {
+                SDL_RenderCopy(renderer, explosion3_tex, NULL, &explosion_rect);
+            }
+        }
+    }
+    if(model.getGalaxip().getDyingAnimationCounter() > 0) {
+        SDL_Rect explosion_rect = model.getGalaxip().getRect();
+        explosion_rect.w = 32;
+        explosion_rect.h = 32;
+        explosion_rect.x -= 8;
+        explosion_rect.y -= 8;
+        if(model.getGalaxip().getDyingAnimationCounter() == 1) {
+            SDL_RenderCopy(renderer, explosion1_tex, NULL, &explosion_rect);
+        } else if(model.getGalaxip().getDyingAnimationCounter() == 2) {
+            SDL_RenderCopy(renderer, explosion2_tex, NULL, &explosion_rect);
+        } else if(model.getGalaxip().getDyingAnimationCounter() == 3) {
+            SDL_RenderCopy(renderer, explosion3_tex, NULL, &explosion_rect);
+        }
+    }
 }
 
 void View::exit() {
@@ -263,6 +411,18 @@ int View::init() {
     num_9_sur = IMG_Load("images/9.png");
     num_9_tex = SDL_CreateTextureFromSurface(renderer, num_9_sur);
     SDL_FreeSurface(num_9_sur);
+
+    explosion1_sur = IMG_Load("images/explosion1.png");
+    explosion1_tex = SDL_CreateTextureFromSurface(renderer, explosion1_sur);
+    SDL_FreeSurface(explosion1_sur);
+
+    explosion2_sur = IMG_Load("images/explosion2.png");
+    explosion2_tex = SDL_CreateTextureFromSurface(renderer, explosion2_sur);
+    SDL_FreeSurface(explosion2_sur);
+
+    explosion3_sur = IMG_Load("images/explosion3.png");
+    explosion3_tex = SDL_CreateTextureFromSurface(renderer, explosion3_sur);
+    SDL_FreeSurface(explosion3_sur);
 
     return 0;
 }
