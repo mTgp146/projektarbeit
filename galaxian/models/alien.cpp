@@ -54,11 +54,11 @@ void Alien::setLastAttackUpdate() {
   lastAttackUpdate = SDL_GetTicks();
 }
 
-void Alien::moveAlien(int galaxipPos) {
+void Alien::moveAlien(int galaxipPos, Direction dir) {
   int dt = SDL_GetTicks() - lastUpdate;
   moveAlienAlongXAxis(dt);
   if(attackMode) {
-    moveAttackingAlien(galaxipPos, false);
+    moveAttackingAlien(galaxipPos, false, dir);
     rect.x = (int)attackX;
     rect.y = (int)attackY;
   } else {
@@ -67,7 +67,7 @@ void Alien::moveAlien(int galaxipPos) {
     rect.y = (int)realY;
   }
   if(returnMode && realY < initialY) {
-    realY = realY + 0.1 * dt;
+    realY = realY + 0.3 * dt;
     rect.y = (int)realY;
   } else if(returnMode && realY >= initialY) {
     returnMode = false;
@@ -77,13 +77,13 @@ void Alien::moveAlien(int galaxipPos) {
   lastUpdate = SDL_GetTicks();
 }
 
-void Alien::moveAttackingAlien(int galaxipPos, bool callFromModel) {
+void Alien::moveAttackingAlien(int galaxipPos, bool callFromModel, Direction dir) {
     int dtA = SDL_GetTicks() - lastAttackUpdate;
-    if(attackY <= realY) {
-      moveInCircle(dtA);
-    } else if((attackX - middleOfScreen > 1.0f) && isMovingToGalaxip == false) {
+    if(!isMovingToGalaxip && !isMovingToMiddle && ((dir == Direction::RIGHT && attackX < attackStartX+65) || (dir == Direction::LEFT && attackX > attackStartX-65))) {
+      moveInCircle(dtA, dir);
+    } else if(((dir == Direction::LEFT && attackX - middleOfScreen < -1.0f) || (dir == Direction::RIGHT && attackX - middleOfScreen > 1.0f)) && isMovingToGalaxip == false) {
       isMovingToMiddle = true;
-      moveToMiddle(dtA);
+      moveToMiddle(dtA, dir);
       moveToGalaxipStartX = attackX;
       attackStartY = attackY;
       galaxipPositionAtStartOfAttack = galaxipPos;
@@ -118,9 +118,13 @@ void Alien::setTextureNumber(int texNum) {
 void Alien::setAttackMode(bool attackMode) {
   this->attackMode = attackMode;
   if(attackMode) {
-    attackStartX = realX;
+    attackStartX = rect.x;
+    attackX = rect.x;
   } else {
     isMovingToGalaxip = false;
+    isMovingToMiddle = false;
+    attackY = realY;
+    attackX = realX;
   }
 }
 
@@ -146,14 +150,27 @@ void Alien::setPositionInFormation(int position) {
   initialY = (float)rect.y;
 }
 
-void Alien::moveInCircle(int dt) {
-  attackX = attackX + 0.035 * dt;
-  attackY = attackY - 1.0 * sin(0.09*(attackX-attackStartX));
+void Alien::moveInCircle(int dt, Direction dir) {
+  if(dir == LEFT) {
+    attackX = attackX - 0.035 * dt;
+    attackY = attackY + 1.0 * sin(0.09*(attackX-attackStartX));
+  } else {
+    attackX = attackX + 0.035 * dt;
+    attackY = attackY - 1.0 * sin(0.09*(attackX-attackStartX));
+  }
 }
 
-void Alien::moveToMiddle(int dt) {
-  attackX = attackX + 0.0007 * dt * (middleOfScreen - attackStartX);
-  attackY = attackY + 2.0 * dt * (1/((attackY - realY)+10));
+void Alien::moveToMiddle(int dt, Direction dir) {
+  if(dir == LEFT) {
+    attackX = attackX - 0.0007 * dt * (attackStartX - middleOfScreen);
+  } else {
+    attackX = attackX + 0.0007 * dt * (middleOfScreen - attackStartX);
+  }
+  if((attackY - realY) <= 0) {
+    attackY = attackY + 0.1 * dt;
+  } else {
+    attackY = attackY + 2.0 * dt * (1/((attackY - realY)+10));
+  }
 }
 
 void Alien::moveAlienToGalaxip(int dt) {

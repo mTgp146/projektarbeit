@@ -16,11 +16,11 @@ class Alien {
         SDL_Rect getRect() const;
         void setX(int x);
         void setY(int y);
-        void moveAlien(int galaxipPos);
+        void moveAlien(int galaxipPos, Direction dir);
         /**
          * Moves the alien in the game when it is attacking.
         */
-        void moveAttackingAlien(int galaxipPos, bool callFromModel);
+        void moveAttackingAlien(int galaxipPos, bool callFromModel, Direction dir);
         /**
          * Moves the alien in the game when it is not attacking.
         */
@@ -45,8 +45,8 @@ class Alien {
          * @param position The index of the alien in the formation.
         */
         void setPositionInFormation(int position);
-        void moveInCircle(int dt);
-        void moveToMiddle(int dt);
+        void moveInCircle(int dt, Direction dir);
+        void moveToMiddle(int dt, Direction dir);
         void moveAlienToGalaxip(int dt);
         bool isIsMovingToMiddle() const;
         int getDyingAnimationCounter() const;

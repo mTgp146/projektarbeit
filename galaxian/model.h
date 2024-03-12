@@ -104,14 +104,47 @@ class Model {
          * Moves the projectiles of the aliens in the game.
         */
         void moveAlienShots();
+        /**
+         * Checks if the attacking alien is moving to the middle.
+         * @return true if the attacking alien is moving to the middle, false otherwise.
+         */
         bool isAttackingAlienMovingToMiddle();
+        /**
+         * Get the Attacking Alien X object
+         * @return the x position of the attacking alien
+         */
         int getAttackingAlienX();
+        /**
+         * Get the Attacking Alien Y object
+         * @return the y position of the attacking alien
+         */
         int getAttackingAlienY();
+        /**
+         * move the attacking alien if the other aliens dont move
+         */
         void moveAttackingAlien();
+        /**
+         * Try to revive the Galaxip if it is dead.
+         */
         void tryToReviveGalaxip();
+        /**
+         * Check for explosions and increase the explosion counter.
+         */
         void checkExplosions();
+        /**
+         * Check if a new attack should be started.
+         */
         void checkForNewAttack();
+        /**
+         * Get the new attacker
+         * @return the new attacker
+         */
         int getNewAttacker();
+        /**
+         * Get the new attacking alien (type)
+         * @param i the index of the attacking alien
+         * @return the new attacking alien
+         */
         int getNewAttackingAlien(int i);
 
     private:

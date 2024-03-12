@@ -67,10 +67,6 @@ void Model::initAliens() {
         }
         flagships[i].setPositionInFormation(i);
     }
-
-    greenAliens[59].setAttackMode(true);
-    alienInAttack = true;
-    attackingAlien = 59;
 }
 
 Galaxip Model::getGalaxip() {
@@ -199,24 +195,19 @@ void Model::moveAliens() {
                 }
             }
         }
-        // random number between 0 and 30
-        /*int randomNumber = rand() % 30;
-        if(greenAliens[randomNumber].isAlive() && attack) {
-            greenAliens[randomNumber].setAttackMode(true);
-            attack = false;
-        }*/
 
         for(int i = 0; i < 60; i++) {
-            greenAliens[i].moveAlien(galaxip.getX());
-        }
-        for(int i = 0; i < 60; i++) {
-            blueAliens[i].moveAlien(galaxip.getX());
-        }
-        for(int i = 0; i < 60; i++) {
-            redAliens[i].moveAlien(galaxip.getX());
-        }
-        for(int i = 0; i < 60; i++) {
-            flagships[i].moveAlien(galaxip.getX());
+            if((i%10) < 5) {
+                greenAliens[i].moveAlien(galaxip.getX(), GreenAlien::Direction::LEFT);
+                blueAliens[i].moveAlien(galaxip.getX(), BlueAlien::Direction::LEFT);
+                redAliens[i].moveAlien(galaxip.getX(), RedAlien::Direction::LEFT);
+                flagships[i].moveAlien(galaxip.getX(), Flagship::Direction::LEFT);
+            } else {
+                greenAliens[i].moveAlien(galaxip.getX(), GreenAlien::Direction::RIGHT);
+                blueAliens[i].moveAlien(galaxip.getX(), BlueAlien::Direction::RIGHT);
+                redAliens[i].moveAlien(galaxip.getX(), RedAlien::Direction::RIGHT);
+                flagships[i].moveAlien(galaxip.getX(), Flagship::Direction::RIGHT);
+            }
         }
     } else {
         if(alienInAttack) {
@@ -224,14 +215,8 @@ void Model::moveAliens() {
         }
         for(int i = 0; i < 60; i++) {
             greenAliens[i].setLastUpdate();
-        }
-        for(int i = 0; i < 60; i++) {
             blueAliens[i].setLastUpdate();
-        }
-        for(int i = 0; i < 60; i++) {
             redAliens[i].setLastUpdate();
-        }
-        for(int i = 0; i < 60; i++) {
             flagships[i].setLastUpdate();
         }
     }
@@ -279,6 +264,7 @@ void Model::collisionCheck() {
             if(greenAliens[i].isInAttackMode()) {
                 alienInAttack = false;
                 points.addPoints(Points::Values::GREEN_ATTACK);
+                lastAttack = SDL_GetTicks();
             } else {
                 points.addPoints(Points::Values::GREEN_FORMATION);
             }
@@ -294,6 +280,7 @@ void Model::collisionCheck() {
             if(blueAliens[i].isInAttackMode()) {
                 alienInAttack = false;
                 points.addPoints(Points::Values::BLUE_ATTACK);
+                lastAttack = SDL_GetTicks();
             } else {
                 points.addPoints(Points::Values::BLUE_FORMATION);
             }
@@ -309,6 +296,7 @@ void Model::collisionCheck() {
             if(redAliens[i].isInAttackMode()) {
                 alienInAttack = false;
                 points.addPoints(Points::Values::RED_ATTACK);
+                lastAttack = SDL_GetTicks();
             } else {
                 points.addPoints(Points::Values::RED_FORMATION);
             }
@@ -324,6 +312,7 @@ void Model::collisionCheck() {
             if(flagships[i].isInAttackMode()) {
                 alienInAttack = false;
                 points.addPoints(Points::Values::FLAGSHIP_ATTACK_SOLO);
+                lastAttack = SDL_GetTicks();
             } else {
                 points.addPoints(Points::Values::FLAGSHIP_FORMATION);
             }
@@ -573,14 +562,27 @@ int Model::getAttackingAlienY() {
 }
 
 void Model::moveAttackingAlien() {
-    if(attackingAlienType == G) {
-        greenAliens[attackingAlien].moveAttackingAlien(galaxip.getX(), true);
-    } else if(attackingAlienType == B) {
-        blueAliens[attackingAlien].moveAttackingAlien(galaxip.getX(), true);
-    } else if(attackingAlienType == R) {
-        redAliens[attackingAlien].moveAttackingAlien(galaxip.getX(), true);
-    } else if(attackingAlienType == F) {
-        flagships[attackingAlien].moveAttackingAlien(galaxip.getX(), true);
+    if((attackingAlien%10) < 5) {
+        if(attackingAlienType == G) {
+            greenAliens[attackingAlien].moveAttackingAlien(galaxip.getX(), true, GreenAlien::Direction::LEFT);
+        } else if(attackingAlienType == B) {
+            blueAliens[attackingAlien].moveAttackingAlien(galaxip.getX(), true, BlueAlien::Direction::LEFT);
+        } else if(attackingAlienType == R) {
+            redAliens[attackingAlien].moveAttackingAlien(galaxip.getX(), true, RedAlien::Direction::LEFT);
+        } else if(attackingAlienType == F) {
+            flagships[attackingAlien].moveAttackingAlien(galaxip.getX(), true, Flagship::Direction::LEFT);
+        }
+    } else {
+        if(attackingAlienType == G) {
+            greenAliens[attackingAlien].moveAttackingAlien(galaxip.getX(), true, GreenAlien::Direction::RIGHT);
+        } else if(attackingAlienType == B) {
+            blueAliens[attackingAlien].moveAttackingAlien(galaxip.getX(), true, BlueAlien::Direction::RIGHT);
+        } else if(attackingAlienType == R) {
+            redAliens[attackingAlien].moveAttackingAlien(galaxip.getX(), true, RedAlien::Direction::RIGHT);
+        } else if(attackingAlienType == F) {
+            flagships[attackingAlien].moveAttackingAlien(galaxip.getX(), true, Flagship::Direction::RIGHT);
+        }
+
     }
 }
 
@@ -645,7 +647,7 @@ void Model::checkExplosions() {
 }
 
 void Model::checkForNewAttack() {
-    if(!alienInAttack && SDL_GetTicks() - lastAttack > 3000) {
+    if(!alienInAttack && SDL_GetTicks() - lastAttack > 2000) {
         lastAttack = SDL_GetTicks();
         getNewAttacker();
     }
