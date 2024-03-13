@@ -3,7 +3,7 @@
 
 void Model::initAliens() {
     FILE *file;
-    file = fopen("alien_formation_test.txt", "r");
+    file = fopen("alien_formation_standard.txt", "r");
     char row1[100];
     char row2[100];
     char row3[100];
