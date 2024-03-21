@@ -153,6 +153,9 @@ class Model {
          * Check if all aliens are dead and respawn them.
          */
         void checkIfAllAliensAreDead();
+        int getLevel();
+        int getHighscore();
+        void setHighscore();
 
     private:
         int lastAlienDisplayChange = SDL_GetTicks();
@@ -174,4 +177,5 @@ class Model {
         int lastDeath = SDL_GetTicks();
         int lastAttack = SDL_GetTicks();
         bool gameOver = false;
+        int level = 10;
 };

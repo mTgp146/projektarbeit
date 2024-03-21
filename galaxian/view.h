@@ -36,6 +36,8 @@ class View {
     void renderScore();
     void renderLives();
     void renderExplosions();
+    void renderLevel();
+    void renderHighscore();
     /**
      * Exits the game.
      * It frees the memory used by the textures and the renderer.
@@ -95,6 +97,10 @@ class View {
     SDL_Surface* explosion2_sur;
     SDL_Texture* explosion3_tex;
     SDL_Surface* explosion3_sur;
+    SDL_Texture* flag_tex;
+    SDL_Surface* flag_sur;
+    SDL_Texture* highscore_tex;
+    SDL_Surface* highscore_sur;
     SDL_Renderer* renderer;
     SDL_Window *window;
     Model &model;

@@ -1,16 +1,10 @@
 #include "controller.h"
 #include <iostream>
 #include <cmath>
-//#include <chrono>
-//#include <thread>
 
 Controller::Controller(Model &model, View &view) : model(model), view(view) {}
 
 void Controller::mainLoop() {
-    
-    //using namespace std::this_thread; //sleep_for
-    //using namespace std::chrono_literals; //ms
-
     while (true) {
         Uint64 start = SDL_GetPerformanceCounter();
 
@@ -22,7 +16,9 @@ void Controller::mainLoop() {
         // Cap to 60 FPS
         Uint64 end = SDL_GetPerformanceCounter();
 	    float elapsedMS = (end - start) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
-	    SDL_Delay(floor(16.666f - elapsedMS));
+        if(elapsedMS < 16.666f) {
+            SDL_Delay(floor(16.666f - elapsedMS));
+        }
 
         // stop game if window is closed
         if(SDL_PollEvent(&windowEvent)) {
@@ -36,6 +32,7 @@ void Controller::mainLoop() {
 
 void Controller::init() {
     model.initAliens();
+    model.setHighscore();
     model.startMusic();
 }
 

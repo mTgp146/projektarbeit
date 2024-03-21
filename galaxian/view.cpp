@@ -17,6 +17,8 @@ void View::render() {
     renderScore();
     renderLives();
     renderExplosions();
+    renderLevel();
+    renderHighscore();
 
 	SDL_RenderPresent(renderer);
 }
@@ -203,7 +205,7 @@ void View::renderLives() {
     int lives = model.getGalaxip().getLives();
     int x = 20;
     for(int i = 0; i < lives; i++) {
-        SDL_Rect galaxip_rect = {WIDTH - x, 8, 16, 16};
+        SDL_Rect galaxip_rect = {WIDTH - x - 64, 8, 16, 16};
         SDL_RenderCopy(renderer, galaxip_tex, NULL, &galaxip_rect);
         x += 20;
     }
@@ -282,6 +284,54 @@ void View::renderExplosions() {
             SDL_RenderCopy(renderer, explosion3_tex, NULL, &explosion_rect);
         }
     }
+}
+
+void View::renderLevel() {
+    int level = model.getLevel();
+    int row = 0;
+    for(int i = 0; i < level; i++) {
+        if (i%3 == 0) {
+            row++;
+        }
+        SDL_Rect flag_rect = {WIDTH - (i%3)*16 - 16, 8 + (row-1)*20, 8, 16};
+        SDL_RenderCopy(renderer, flag_tex, NULL, &flag_rect);
+    }
+}
+
+void View::renderHighscore() {
+    SDL_Rect highscore_rect = {WIDTH/2 - 69, 8, 138, 20};
+    SDL_RenderCopy(renderer, highscore_tex, NULL, &highscore_rect);
+
+    int points = model.getHighscore();
+    int digit = 0;
+    int x = 0;
+    do {
+        digit = points % 10;
+        points = points / 10;
+        SDL_Rect num_rect = {WIDTH/2 - x, 32, 16, 20};
+        if(digit == 0) {
+            SDL_RenderCopy(renderer, num_0_tex, NULL, &num_rect);
+        } else if(digit == 1) {
+            SDL_RenderCopy(renderer, num_1_tex, NULL, &num_rect);
+        } else if(digit == 2) {
+            SDL_RenderCopy(renderer, num_2_tex, NULL, &num_rect);
+        } else if(digit == 3) {
+            SDL_RenderCopy(renderer, num_3_tex, NULL, &num_rect);
+        } else if(digit == 4) {
+            SDL_RenderCopy(renderer, num_4_tex, NULL, &num_rect);
+        } else if(digit == 5) {
+            SDL_RenderCopy(renderer, num_5_tex, NULL, &num_rect);
+        } else if(digit == 6) {
+            SDL_RenderCopy(renderer, num_6_tex, NULL, &num_rect);
+        } else if(digit == 7) {
+            SDL_RenderCopy(renderer, num_7_tex, NULL, &num_rect);
+        } else if(digit == 8) {
+            SDL_RenderCopy(renderer, num_8_tex, NULL, &num_rect);
+        } else {
+            SDL_RenderCopy(renderer, num_9_tex, NULL, &num_rect);
+        }
+        x += 20;
+    } while (points > 0	);
 }
 
 void View::exit() {
@@ -423,6 +473,13 @@ int View::init() {
     explosion3_sur = IMG_Load("images/explosion3.png");
     explosion3_tex = SDL_CreateTextureFromSurface(renderer, explosion3_sur);
     SDL_FreeSurface(explosion3_sur);
+
+    flag_sur = IMG_Load("images/Flag.png");
+    flag_tex = SDL_CreateTextureFromSurface(renderer, flag_sur);
+    SDL_FreeSurface(flag_sur);
+
+    highscore_sur = IMG_Load("images/Highscore.png");
+    highscore_tex = SDL_CreateTextureFromSurface(renderer, highscore_sur);
 
     return 0;
 }

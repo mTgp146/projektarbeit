@@ -29,9 +29,13 @@ public:
      * Resets the points of the player to 0.
     */
     void resetPoints();
+    int getHighscore();
+    void setHighscore(int highscore);
+    void setHighscore();
 private:
     /**
      * The current points of the player.
     */
     int points = 0;
+    int highscore = 0;
 };

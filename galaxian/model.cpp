@@ -1,5 +1,6 @@
 #include "model.h"
 #include <cstdio>
+#include <string>
 
 void Model::initAliens() {
     FILE *file;
@@ -12,6 +13,7 @@ void Model::initAliens() {
     char row6[100];
     std::array<char, 60> formation = {};
     fgets(row1, 100, file);
+    //printf("%s",row1);
     for(int i = 0; i < 10; i++) {
         formation[i] = row1[i];
     }
@@ -35,6 +37,7 @@ void Model::initAliens() {
     for(int i = 0; i < 10; i++) {
         formation[i+50] = row6[i];
     }
+    fclose(file);
 
     // init Green Aliens
     for(int i = 0; i < 60; i++) {
@@ -769,7 +772,15 @@ void Model::checkGameOver() {
     initAliens();
     galaxip.setLives(3);
     galaxip.setX(240);
+    if(points.getPoints() > points.getHighscore()) {  
+        FILE *file;
+        file = fopen("../highscore.txt", "w");
+        fputs(std::to_string(points.getPoints()).c_str(),file);
+        fclose (file);
+        points.setHighscore();
+    }
     resetPoints();
+    level = 1;
     lastAttack = SDL_GetTicks();
     alienInAttack = false;
 }
@@ -801,5 +812,23 @@ void Model::checkIfAllAliensAreDead() {
     if(allDead) {
         initAliens();
         lastAttack = SDL_GetTicks();
+        level += 1;
     }
+}
+
+int Model::getLevel() {
+    return level;
+}
+
+int Model::getHighscore() {
+    return points.getHighscore();
+}
+
+void Model::setHighscore() {
+    FILE *file;
+    file = fopen("highscore.txt", "r");
+    char hs[100];
+    fgets(hs, 100, file);
+    points.setHighscore(std::atoi(hs));
+    fclose(file);
 }
